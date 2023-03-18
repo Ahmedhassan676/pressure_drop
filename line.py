@@ -366,6 +366,7 @@ def main():
         df_liq['input'] = 0.00
         edited_df = st.experimental_data_editor(df_liq.iloc[:7,:])
         p1,t,Q,rho_liq, mu,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0]
+        Q = Q /3600
         D = D*25.4*0.001
         mu = mu*0.001
         if st.button("Reveal Calculations", key = 'calculations_tableLiq'):
