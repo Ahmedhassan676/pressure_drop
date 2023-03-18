@@ -10,11 +10,11 @@ from neqsim.thermo import fluid, TPflash, createfluid2
 from neqsim.process import pipe, pipeline, clearProcess, stream, runProcess
 
 
-url ='table.csv'
+url ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
 df_gas = pd.read_csv(url, index_col=[0])
-url_1 = 'comp.csv'
+url_1 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp.csv'
 df_comp_table = pd.read_csv(url_1)
-url_2 ='summary.csv'
+url_2 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
 df_summary = pd.read_csv(url_2, index_col=[0])
 def k_calculations(df,df_comp_table,suc_t,disch_t):
         
