@@ -16,6 +16,9 @@ url_1 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp
 df_comp_table = pd.read_csv(url_1)
 url_2 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
 df_summary = pd.read_csv(url_2, index_col=[0])
+url_3 ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
+df_liq = pd.read_csv(url_3, index_col=[0])
+
 def k_calculations(df,df_comp_table,suc_t,disch_t):
         
         temperatures = np.array([suc_t,disch_t])*1.8+ 32 
@@ -132,10 +135,15 @@ def NeqSim_calculations(q,D,df_comp,t,p1,p2,L):
         q = q*24/(1000000)
         D = D*25.4*0.001
         #Creating inlet fluid using SRK-EoS
-        names =  list(df_comp.index.str.lower())
-        molefractions = list(df_comp['mol%']*0.01)
-        fluid1 = createfluid2(names, molefractions)
-        fluid1.setMixingRule('classic')
+        if len(df_comp.index) ==1:
+            fluid1 = fluid("srk")  # create a fluid using the SRK-Eo
+            fluid1.addComponent('methane',1/3600)
+        else:
+            
+            names =  list(df_comp.index.str.lower())
+            molefractions = list(df_comp['mol%']*0.01)
+            fluid1 = createfluid2(names, molefractions)
+            fluid1.setMixingRule('classic')
         fluid1.setTemperature(t, "C")
         fluid1.setPressure(p1, "bara")
         fluid1.setTotalFlowRate(q, "MSm3/day")
@@ -339,6 +347,31 @@ def main():
             df_result['Panhandle_B'] = Summary_calculations(Q_std[3],D,G,mu,E_b,p1,p2,t,m_wt,k,rho2,L,z)
             df_result['NeqSim Simulator'] = Summary_calculations(Q_std[4],D,G,mu,0,p1,p2,t,m_wt,k,rho2,L,z)
             st.dataframe(df_result)
-            detailed_NeqSim(Q_std[4],D,df_comp,t,p1,L)
+            #detailed_NeqSim(Q_std[4],D,df_comp,t,p1,L)
+    else:
+        def Darcy_equation(Q,L,D,rho_liq,mu):
+                A = np.pi * (D**2) * 0.25
+                v_liq = Q/A 
+                f=0.02
+                e = 0
+                error = 10
+                while error > 0.0001:
+                    Re = (rho_liq*v_liq*D)/mu
+                    f1 = (1/(-2*np.log10((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2 
+                    error = abs(f - f1)
+                    f = f1
+                dp = (f*L*rho_liq*(v_liq**2))/(D*2)*0.001*0.0101972
+        
+                return dp,v_liq,Re,f,e
+        df_liq['input'] = 0.00
+        edited_df = st.experimental_data_editor(df_liq.iloc[:7,:])
+        p1,t,Q,rho_liq, mu,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0]
+        D = D*25.4*0.001
+        mu = mu*0.001
+        if st.button("Reveal Calculations", key = 'calculations_tableLiq'):
+            dp,v,Re,f,e = Darcy_equation(Q,L,D,rho_liq,mu)
+            p2 = p1-dp
+            df_liq['input'] = [p1,t,Q,rho_liq, mu,L,D,p2,dp,v,Re,f,e]
+            st.dataframe(df_liq)
 if __name__ == '__main__':
     main()
