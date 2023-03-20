@@ -135,15 +135,11 @@ def NeqSim_calculations(q,D,df_comp,t,p1,p2,L):
         q = q*24/(1000000)
         D = D*25.4*0.001
         #Creating inlet fluid using SRK-EoS
-        if len(df_comp.index) ==1:
-            fluid1 = fluid("srk")  # create a fluid using the SRK-Eo
-            fluid1.addComponent('methane',1/3600)
-        else:
             
-            names =  list(df_comp.index.str.lower())
-            molefractions = list(df_comp['mol%']*0.01)
-            fluid1 = createfluid2(names, molefractions)
-            fluid1.setMixingRule('classic')
+        names =  list(df_comp.index.str.lower())
+        molefractions = list(df_comp['mol%']*0.01)
+        fluid1 = createfluid2(names, molefractions)
+        fluid1.setMixingRule('classic')
         fluid1.setTemperature(t, "C")
         fluid1.setPressure(p1, "bara")
         fluid1.setTotalFlowRate(q, "MSm3/day")
@@ -189,7 +185,7 @@ def detailed_NeqSim(q,D,df_comp,t,p1,L):
 
     diameter = [D,D] #meter
     roughnes = [5.0e-5,5.0e-5] #meter
-    position = [0,L*1000] #meter
+    position = [0,L] #meter
     height = [0.0, 0.0] #meter
     outtemperatures =[288.15,288.15] #Kelvin
     outHeatU = [0, 0] #W/m2K
