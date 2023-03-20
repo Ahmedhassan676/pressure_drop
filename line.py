@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 import neqsim
 from neqsim.thermo.thermoTools import *
 from neqsim.process.processTools import *
