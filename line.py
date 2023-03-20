@@ -343,7 +343,7 @@ def main():
             df_result['Panhandle_B'] = Summary_calculations(Q_std[3],D,G,mu,E_b,p1,p2,t,m_wt,k,rho2,L,z)
             df_result['NeqSim Simulator'] = Summary_calculations(Q_std[4],D,G,mu,0,p1,p2,t,m_wt,k,rho2,L,z)
             st.dataframe(df_result)
-            #detailed_NeqSim(Q_std[4],D,df_comp,t,p1,L)
+            detailed_NeqSim(Q_std[4],D,df_comp,t,p1,L)
     else:
         def Darcy_equation(Q,L,D,rho_liq,mu):
                 A = np.pi * (D**2) * 0.25
