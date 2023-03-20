@@ -186,7 +186,7 @@ def detailed_NeqSim(q,D,df_comp,t,p1,L):
 
     diameter = [D,D] #meter
     roughnes = [5.0e-5,5.0e-5] #meter
-    position = [0,L] #meter
+    position = [0,L*1000] #meter
     height = [0.0, 0.0] #meter
     outtemperatures =[288.15,288.15] #Kelvin
     outHeatU = [0, 0] #W/m2K
