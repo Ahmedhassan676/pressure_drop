@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import pandas as pd
+import fluids
 import matplotlib.pyplot as plt
 import neqsim
 from neqsim.thermo.thermoTools import *
@@ -11,13 +12,13 @@ from neqsim.thermo import fluid, TPflash, createfluid2
 from neqsim.process import pipe, pipeline, clearProcess, stream, runProcess
 
 
-url ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
+url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
 df_gas = pd.read_csv(url, index_col=[0])
 url_1 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp.csv'
 df_comp_table = pd.read_csv(url_1)
 url_2 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
 df_summary = pd.read_csv(url_2, index_col=[0])
-url_3 ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
+url_3 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
 df_liq = pd.read_csv(url_3, index_col=[0])
 
 def k_calculations(df,df_comp_table,suc_t,disch_t):
@@ -36,7 +37,7 @@ def k_calculations(df,df_comp_table,suc_t,disch_t):
 def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z):
         tb = 273.15+15.55556
         Pb = 101.325
-        D_mm = 25.4 * D
+        D_mm = D * 1000
         A = np.pi*0.25*((D_mm/1000)**2)
         Q_normal = Q_std*(273.15/(273.15+15))
         Q_actual = Q_std*(1.033023/p2)*((t+273.15)/tb)
@@ -131,113 +132,192 @@ def choose_composition():
 
             except (ValueError, st.errors.DuplicateWidgetID): pass
             except (TypeError, KeyError, ZeroDivisionError):st.write('Please Check your data')
-def NeqSim_calculations(q,D,df_comp,t,p1,p2,L):
-        p1 = p1*98.066
-        q = q*24/(1000000)
-        D = D*25.4*0.001
-        #Creating inlet fluid using SRK-EoS
+def NeqSim_calculations(q,D,df_comp,t,p1,p2,L,type):
+        if type == 'estimate quantity': 
+            p1 = p1*98.066*0.01
+            p2 = p2*98.066*0.01
+            q = q*24/(1000000)
+            #Creating inlet fluid using SRK-EoS   
+            names =  list(df_comp.index.str.lower())
+            molefractions = list(df_comp['mol%']*0.01)
+            fluid1 = createfluid2(names, molefractions)
+            fluid1.setMixingRule('classic')
+            fluid1.setTemperature(t, "C")
+            fluid1.setPressure(p1, "bara")
+            fluid1.setTotalFlowRate(q, "MSm3/day")
             
-        names =  list(df_comp.index.str.lower())
-        molefractions = list(df_comp['mol%']*0.01)
-        fluid1 = createfluid2(names, molefractions)
-        fluid1.setMixingRule('classic')
-        fluid1.setTemperature(t, "C")
-        fluid1.setPressure(p1, "bara")
-        fluid1.setTotalFlowRate(q, "MSm3/day")
-        
-        TPflash(fluid1)
+            TPflash(fluid1)
 
-        stream1 = stream(fluid1)
-
-        deltaElevation = 0.0
-        pipeLength = L*1000
-        roughness= 5.0e-5
-        diameter = D
-        error = 10
-        while error > 0.001:
             
+
+            deltaElevation = 0.0
+            pipeLength = L
+            roughness= 0.00005
+            diameter = D
+            error = 10
+            method = "friction theory"
+            fluid1.getPhase('gas').getPhysicalProperties().setViscosityModel(method)
+            fluid1.initProperties()
+            while error > 0.01:
+                fluid1.setTotalFlowRate(q, "MSm3/day")
+                clearProcess()
+                
+                stream1 = stream(fluid1)
+                
+                pipeSimple = pipe(stream1, pipeLength, deltaElevation, diameter, roughness)
+                runProcess()
+                
+                
+                error = abs(p2 - pipeSimple.getOutStream().getFluid().getPressure('bara'))
+                if p2 - pipeSimple.getOutStream().getFluid().getPressure('bara') > 0.01:
+                    q = q - q*0.01
+                elif p2 - pipeSimple.getOutStream().getFluid().getPressure('bara') < -0.01:
+                    q = q + q*0.01
+                else: error = error
+                result = q*1000000/24
+        if type == "estimate upstream pressure":
+            p1 = p1*98.066*0.01
+            p2 = p2*98.066*0.01
+            q = q*24/(1000000)
+            #Creating inlet fluid using SRK-EoS   
+            names =  list(df_comp.index.str.lower())
+            molefractions = list(df_comp['mol%']*0.01)
+            fluid1 = createfluid2(names, molefractions)
+            fluid1.setMixingRule('classic')
+            fluid1.setTemperature(t, "C")
+            fluid1.setPressure(p1, "bara")
+            fluid1.setTotalFlowRate(q, "MSm3/day")
+            
+            TPflash(fluid1)
+
+            
+
+            deltaElevation = 0.0
+            pipeLength = L
+            roughness= 0.00005
+            diameter = D
+            error = 10
+            method = "friction theory"
+            fluid1.getPhase('gas').getPhysicalProperties().setViscosityModel(method)
+            fluid1.initProperties()
+            while error > 0.01:
+                fluid1.setPressure(p1, "bara")
+                clearProcess()
+                
+                stream1 = stream(fluid1)
+                
+                pipeSimple = pipe(stream1, pipeLength, deltaElevation, diameter, roughness)
+                runProcess()  
+                error = abs(p2 - pipeSimple.getOutStream().getFluid().getPressure('bara'))
+                if p2 - pipeSimple.getOutStream().getFluid().getPressure('bara') > 0.01:
+                    p1 = p1 + p1*0.01
+                elif p2 - pipeSimple.getOutStream().getFluid().getPressure('bara') < -0.01:
+                    p1 = p1 - p1*0.01
+                else: error = error
+            result = pipeSimple.getInStream().getFluid().getPressure('bara')/0.9806
+        if type == "estimate downstream pressure":
+            p1 = p1*98.066*0.01
+            p2 = p2*98.066*0.01
+            q = q*24/(1000000)
+            #Creating inlet fluid using SRK-EoS   
+            names =  list(df_comp.index.str.lower())
+            molefractions = list(df_comp['mol%']*0.01)
+            fluid1 = createfluid2(names, molefractions)
+            fluid1.setMixingRule('classic')
+            fluid1.setTemperature(t, "C")
+            fluid1.setPressure(p1, "bara")
+            fluid1.setTotalFlowRate(q, "MSm3/day")
+            
+            TPflash(fluid1)
+
+            
+
+            deltaElevation = 0.0
+            pipeLength = L
+            roughness= 0.00005
+            diameter = D
+            error = 10
+            method = "friction theory"
+            fluid1.getPhase('gas').getPhysicalProperties().setViscosityModel(method)
+            fluid1.initProperties()
+               
             clearProcess()
-            pipeSimple = pipe(stream1, pipeLength, deltaElevation, diameter, roughness)
-            runProcess()
             
-            error = p2 - pipeSimple.getOutStream().getFluid().getPressure('bara')
-            if error >0:
-                 q = q - q*0.01
-            elif error < 0:
-                 q = q + q*0.01
-            else: error = error
+            stream1 = stream(fluid1)
+            
+            pipeSimple = pipe(stream1, pipeLength, deltaElevation, diameter, roughness)
+            runProcess()  
+            
+            result = pipeSimple.getOutStream().getFluid().getPressure('bara')/0.9806
+        return result
+def Calculate_OutVelocity(D,Q_std,p2,t):
+        tb = 273.15+15.55556
+        
+        D_mm = D * 1000
+        A = np.pi*0.25*((D_mm/1000)**2)
+        
+        Q_actual = Q_std*(1.033023/p2)*((t+273.15)/tb)
+        v = Q_actual/(A*3600) #Velocity (m/s) 
+        return v
+def graph_NeqSim(q,D,df_comp,t,p1,L):
+            
+            p2 = []
+            p2.append(p1)
+            L_list = []
+            velocity = []
+            velocity.append(Calculate_OutVelocity(D,q,p1,t))
+            p1 = p1*98.066*0.01
+            
+            q = q*24/(1000000)
+            #Creating inlet fluid using SRK-EoS   
+            names =  list(df_comp.index.str.lower())
+            molefractions = list(df_comp['mol%']*0.01)
+            fluid1 = createfluid2(names, molefractions)
+            fluid1.setMixingRule('classic')
+            fluid1.setTemperature(t, "C")
+            
+            fluid1.setTotalFlowRate(q, "MSm3/day")
+            
+            TPflash(fluid1)
 
-        return q*1000000/24
-def detailed_NeqSim(q,D,df_comp,t,p1,L):
-    p1 = p1*0.98066
-    q = q*24/(1000000)
-    D = D*25.4*0.001
-     #Creating inlet fluid using SRK-EoS
-    names = list(df_comp.index.str.lower())
-    molefractions = list(df_comp['mol%']*0.01)
-    fluid1 = createfluid2(names, molefractions)
-    
-    #Creating stream and pipeline
-    clearProcess()
-    stream1 = stream(fluid1)
-    stream1.setFlowRate(q, "MSm3/day")
-    stream1.setTemperature(t, "C")
-    stream1.setPressure(p1, "bara")
+            
 
-    diameter = [D,D] #meter
-    roughnes = [5.0e-5,5.0e-5] #meter
-    position = [0,L*1000] #meter
-    height = [0.0, 0.0] #meter
-    outtemperatures =[288.15,288.15] #Kelvin
-    outHeatU = [0, 0] #W/m2K
-    wallHeatU = [0,0] #W/m2K
+            deltaElevation = 0.0
+            pipeLength = L*0.1
+            roughness= 0.00005
+            diameter = D
+            
+            method = "friction theory"
+            fluid1.getPhase('gas').getPhysicalProperties().setViscosityModel(method)
+            fluid1.initProperties()
+            for i in range(10):
+                fluid1.setPressure(p1, "bara") 
+                clearProcess()
+                
+                stream1 = stream(fluid1)
+                
+                pipeSimple = pipe(stream1, pipeLength, deltaElevation, diameter, roughness)
+                runProcess()
+                
+                p2.append(pipeSimple.getOutStream().getFluid().getPressure('bara')/0.9806)
+                velocity.append(Calculate_OutVelocity(D,q*1000000/24,p2[i+1],t))
+                L_list.append(0.1*i*L)
+                p1 = pipeSimple.getOutStream().getFluid().getPressure('bara')
+            L_list.append(L)
+            fig,axs = plt.subplots(1,2)
+            fig.set_figheight(4)
+            fig.set_figwidth(12)
+            axs[0].plot(L_list,p2)
+            
+            axs[0].set_xlabel("Length (m)")
+            axs[0].set_ylabel("Pressure (kg/cm2.a)")
 
-    pipe1 = pipeline(stream1, position, diameter, height, outtemperatures, roughnes,outHeatU,wallHeatU)
-    pipe1.setNumberOfNodesInLeg(100)
-    runProcess()
-    numberofnodes = pipe1.getPipe().getTotalNumberOfNodes()
-    pres = []
-    temp = []
-    length = []
-    height = []
-    calcdensity = []
-    gasvelocity = []
-
-    for node in range (0,pipe1.getPipe().getTotalNumberOfNodes()-1):
-        pres.append(pipe1.getPipe().getNode(node).getBulkSystem().getPressure('bara'))
-        temp.append(pipe1.getPipe().getNode(node).getBulkSystem().getTemperature('C'))
-        height.append(pipe1.getPipe().getNode(node).getVerticalPositionOfNode())
-        length.append(pipe1.getPipe().getNode(node).getDistanceToCenterOfNode())
-        calcdensity.append(pipe1.getPipe().getNode(node).getBulkSystem().getDensity('kg/m3'))
-        gasvelocity.append(pipe1.getPipe().getNode(node).getVelocity()) 
-    fig,axs = plt.subplots(5,1)
-    fig.set_figheight(12)
-    fig.set_figwidth(12)
-    axs[0].plot(length, pres, '-')
-    axs[0].set_ylabel('Pressure [bara]')
-    axs[0].set_xlabel('Length [meter]')
-
-    
-    axs[1].plot(length, temp)
-    axs[1].set_xlabel('Length [meter]')
-    axs[1].set_ylabel('Temperature[C]')
-
-   
-    axs[2].plot(length, calcdensity, '-')
-    axs[2].set_ylabel('Density [kg/m3]')
-    axs[2].set_xlabel('Length [meter]')
-
-    
-    axs[3].plot(length, gasvelocity, '-')
-    axs[3].set_ylabel('gasvelocity [m/sec]')
-    axs[3].set_xlabel('Length [meter]')
-
-   
-    axs[4].plot(length, height, '-')
-    axs[4].set_ylabel('height [meter]')
-    axs[4].set_xlabel('position [meter]')
-
-    return st.pyplot(fig)
+            axs[1].plot(L_list,velocity)
+            
+            axs[1].set_xlabel("Length (m)")
+            axs[1].set_ylabel("Velocity (m/s)")
+            st.pyplot(fig)   
+            
 def get_viscosity(df_comp,p1,t):
         
         
@@ -257,47 +337,110 @@ def get_viscosity(df_comp,p1,t):
         rho = fluid1.getDensity('kg/m3')
         return mu, rho
 
-def general_gas_equation(p1,p2,D,G,z,L,t,mu):
-    f = 0.02
-    e = 0.00015*12 #Roughness
-    tb = 273+15.55556
-    Pb = 101.325
-    calc_port =G*(t+273.15)*L*z
-    dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
-    D_mm = 25.4 * D
-    error =10
-    while error > 0.0001:
-        Q_std = ((11.4946*(10**-4))*(1/(f**0.5))*(tb/Pb)*((dp_2/calc_port)**0.5)*((D*25.4)**2.5))/24 #*0.947942947917463/24
+def general_gas_equation(q,p1,p2,D,G,z,L,t,mu,type):
+    if type == 'estimate quantity':
+        L = L*0.001
+        f = 0.02
+        e = 0.00005 #Roughness
+        tb = 273+15.55556
+        Pb = 101.325
+        D = D *1000
+        calc_port =G*(t+273.15)*L*z
+        dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
+        D_mm = D*1000
+        error =10
+        while error > 0.0001:
+            Q_std = ((11.4946*(10**-4))*(1/(f**0.5))*(tb/Pb)*((dp_2/calc_port)**0.5)*((D)**2.5))/24 #*0.947942947917463/24
+            Re = 0.5134*(Pb/tb)*((G*Q_std*24)/(mu*0.01*D_mm))
+            f1 = (1/(-2*np.log((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2
+            
+            error = abs(f - f1)
+            f = f1
+        result1,result2 = Q_std,f
+    if type == "estimate upstream pressure":   
+        Q_std = q
+        L = L*0.001
+        f = 0.02
+        e = 0.00005 #Roughness
+        tb = 273+15.55556
+        Pb = 101.325
+        D = D *1000
+        calc_port =G*(t+273.15)*L*z
+        #dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
+        D_mm = D*1000
+        error =10
         Re = 0.5134*(Pb/tb)*((G*Q_std*24)/(mu*0.01*D_mm))
-        f1 = (1/(-2*np.log10((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2 
-        error = abs(f - f1)
-        f = f1
+        while error > 0.0001:
+            f1 = (1/(-2*np.log((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2
+            error = abs(f - f1)
+            f = f1
+        p1 = np.sqrt(((((Q_std*24*(f**0.5))/((11.4946*(10**-4))*(tb/Pb)*((D)**2.5)))**2)*calc_port)+((p2*98.066)**2))/98.066
+        result1,result2 = p1,f
+    if type == "estimate downstream pressure":   
+        Q_std = q
+        L = L*0.001
+        f = 0.02
+        e = 0.00005 #Roughness
+        tb = 273+15.55556
+        Pb = 101.325
+        D = D *1000
+        calc_port =G*(t+273.15)*L*z
+        #dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
+        D_mm = D*1000
+        error =10
+        Re = 0.5134*(Pb/tb)*((G*Q_std*24)/(mu*0.01*D_mm))
+        while error > 0.0001:
+            f1 = (1/(-2*np.log((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2
+            error = abs(f - f1)
+            f = f1
+        p2 = np.sqrt(-((((Q_std*24*(f**0.5))/((11.4946*(10**-4))*(tb/Pb)*((D)**2.5)))**2)*calc_port)+((p1*98.066)**2))/98.066
+        result1,result2 = p2,f    
+    return result1,result2
+def gas_equations(q,p1,p2,D,G,L,t,z,mu,type):
     
-    return Q_std,f
-def panhandleA_equation(p1,p2,D,G,z,L,t):
-    E = 0.95
-    tb = 273+15.55556
-    Pb = 101.325
-    calc_port =(G**0.8539)*(t+273.15)*L*z
-    dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
-    Q_std = ((4.5965*10**-3)*(E)*((tb/Pb)**1.0788)*((dp_2/calc_port)**0.5394)*((D*25.4)**2.6182))/24 #*(273.15/(273.15+15))/24
-    return Q_std,E
-def panhandleB_equation(p1,p2,D,G,z,L,t):
-    E = 0.95
-    tb = 273+15.55556
-    Pb = 101.325
-    calc_port =(G**0.961)*(t+273.15)*L*z
-    dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
-    Q_std = ((1.002*(10**-2))*(E)*((tb/Pb)**1.02)*((dp_2/calc_port)**0.51)*((D*25.4)**2.53))/24 #*(273.15/(273.15+15))/24
-    return Q_std,E
-def weymouth_equation(p1,p2,D,G,z,L,t):
-    E = 0.95
-    tb = 273+15.55556
-    Pb = 101.325
-    calc_port =(G)*(t+273.15)*L*z
-    dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
-    Q_std = ((3.7435*(10**-3))*(E)*((tb/Pb))*((dp_2/calc_port)**0.5)*((D*25.4)**(8/3)))/24 #*(273.15/(273.15+15))/24
-    return Q_std,E
+    t = t +273.15
+    if type=="estimate quantity":
+        Q = [0,0,0,0,0,0,0,0,0]
+        p1=p1*98.066*1000
+        p2=p2*98.066*1000
+        t = t+273.15 
+        Q[0] = fluids.compressible.Panhandle_A(SG=G,Tavg=t,L=L,D=D,P1=p1,P2=p2,Q=None,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+        Q[1]=fluids.compressible.Panhandle_B(SG=G,Tavg=t,L=L,D=D,P1=p1,P2=p2,Q=None,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+        Q[2]=fluids.compressible.Weymouth(SG=G,Tavg=t,L=L,D=D,P1=p1,P2=p2,Q=None,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+
+        result =np.array(Q)*3600
+    if type=="estimate upstream pressure":
+        q = q/3600
+        P = [0,0,0,0,0,0,0,0,0]
+        
+        p2=p2*98.066*1000
+        
+        P[0] = fluids.compressible.Panhandle_A(SG=G,Tavg=t,L=L,D=D,P1=None,P2=p2,Q=q,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+        P[1]=fluids.compressible.Panhandle_B(SG=G,Tavg=t,L=L,D=D,P1=None,P2=p2,Q=q,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+        P[2]=fluids.compressible.Weymouth(SG=G,Tavg=t,L=L,D=D,P1=None,P2=p2,Q=q,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+  
+        result=np.array(P)/98066
+    if type=="estimate downstream pressure":
+        q = q/3600
+        P = [0,0,0,0,0,0,0,0,0]
+        p1=p1*98.066*1000
+        
+        P[0] = fluids.compressible.Panhandle_A(SG=G,Tavg=t,L=L,D=D,P1=p1,P2=None,Q=q,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+        P[1]=fluids.compressible.Panhandle_B(SG=G,Tavg=t,L=L,D=D,P1=p1,P2=None,Q=q,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+        P[2]=fluids.compressible.Weymouth(SG=G,Tavg=t,L=L,D=D,P1=p1,P2=None,Q=q,Ts=288.7,Ps=101325.0,Zavg=z,E=0.95)
+
+        
+        result=np.array(P)/98066
+    
+    return result
 
 def main():
     html_temp="""
@@ -307,50 +450,150 @@ def main():
     
         """
     st.markdown(html_temp, unsafe_allow_html=True)
-    s1 = st.selectbox('Gas or liquid line sizing?',('Gas','Liquid'), key = 'type')
-    if s1 == 'Gas':
+    s1 = st.selectbox('Chooose your line sizing?',('Gas - estimate Quantity (Std.m3/hr)','Gas - estimate Upstream pressure (kg/cm2.a)','Gas - estimate Downstream pressure (kg/cm2.a)','Liquid','Check Standards for Line Sizing'), key = 'type')
+    if s1 == 'Gas - estimate Quantity (Std.m3/hr)':
         df_gas['input'] = 0.00
         edited_df = st.experimental_data_editor(df_gas)
         
         
-        
-        p1,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0]*0.001,edited_df.iloc[4,0]
-        Q_std = [0,0,0,0,0]
-        try:
-                df_comp = choose_composition()
-                
-                z1, m_wt,Pr1,Tr1 = Z_calculations(df_comp,t,p1)
-                z2, m_wt,Pr2,Tr2 = Z_calculations(df_comp,t,p2)
-                G = m_wt/29
-                z = (z1+z2)*0.5
-                mu,rho1 = get_viscosity(df_comp,p1,t)
-                mu,rho2 = get_viscosity(df_comp,p2,t)
-                k = k_calculations(df_comp,df_comp_table,t,t)
-                
-        except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
-        except UnboundLocalError: pass
+        q=0
+        p1,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
+        if sum(edited_df['input']) != 0:
+            try:
+                D = fluids.nearest_pipe(NPS=D)[1]
+            except ValueError: pass
+            Q_std = [0,0,0,0,0,0,0,0,0,0,0]
+            try:
+                    df_comp = choose_composition()
+                    
+                    z1, m_wt,Pr1,Tr1 = Z_calculations(df_comp,t,p1)
+                    z2, m_wt,Pr2,Tr2 = Z_calculations(df_comp,t,p2)
+                    G = m_wt/29
+                    z = (z1+z2)*0.5
+                    mu,rho1 = get_viscosity(df_comp,p1,t)
+                    mu,rho2 = get_viscosity(df_comp,p2,t)
+                    k = k_calculations(df_comp,df_comp_table,t,t)
+                    Q_std[:3] = gas_equations(q,p1,p2,D,G,L,t,z,mu,'estimate quantity')
+            except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+            except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table22'):
             
-            Q_std[0],f = general_gas_equation(p1,p2,D,G,z,L,t,mu)
-            Q_std[1],E_w = weymouth_equation(p1,p2,D,G,z,L,t)
-            Q_std[2],E_a = panhandleA_equation(p1,p2,D,G,z,L,t)
-            Q_std[3],E_b = panhandleB_equation(p1,p2,D,G,z,L,t)
-            Q_std[4] = NeqSim_calculations(Q_std[0],D,df_comp,t,p1,p2,L)
+            Q_std[10],f = general_gas_equation(Q_std[0],p1,p2,D,G,z,L,t,mu,'estimate quantity')
+            
+            Q_std[9] = NeqSim_calculations(Q_std[10],D,df_comp,t,p1,p2,L,'estimate quantity')
             df_result = pd.DataFrame(df_summary)
-            df_result['General Gas'] = Summary_calculations(Q_std[0],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['Weyouth'] = Summary_calculations(Q_std[1],D,G,mu,E_w,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['Panhandle_A'] = Summary_calculations(Q_std[2],D,G,mu,E_a,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['Panhandle_B'] = Summary_calculations(Q_std[3],D,G,mu,E_b,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['NeqSim Simulator'] = Summary_calculations(Q_std[4],D,G,mu,0,p1,p2,t,m_wt,k,rho2,L,z)
+            df_result['General Gas'] = Summary_calculations(Q_std[10],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z)
+            df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,0,p1,p2,t,m_wt,k,rho2,L,z)
+            
+            df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
+            df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
+            df_result['Weyouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
+
+
             st.dataframe(df_result)
-            detailed_NeqSim(Q_std[4],D,df_comp,t,p1,L)
-    else:
+            graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
+            
+    elif s1 == "Gas - estimate Upstream pressure (kg/cm2.a)":
+        df_gas_modified = df_gas.copy()
+        df_gas_modified['input'] = 0.00
+        df_gas_modified.rename(index={'P1 (Kg/cm2)': 'Flow Rate (Std.m3/hr)'}, inplace=True)
+        edited_df = st.experimental_data_editor(df_gas_modified)
+        
+        
+        
+        q,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
+        if sum(edited_df['input']) != 0:
+            try:
+                D = fluids.nearest_pipe(NPS=D)[1]
+            except ValueError: pass
+            P1 = [0,0,0,0,0,0,0,0,0,0,0]
+            try:
+                    df_comp = choose_composition()
+                    
+                    #z1, m_wt,Pr1,Tr1 = Z_calculations(df_comp,t,p1)
+                    z2, m_wt,Pr2,Tr2 = Z_calculations(df_comp,t,p2)
+                    z = z2
+                    G = m_wt/29
+                    #mu,rho1 = get_viscosity(df_comp,p1,t)
+                    mu,rho2 = get_viscosity(df_comp,p2,t)
+                    
+                    k = k_calculations(df_comp,df_comp_table,t,t)
+                
+                
+                
+            except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+            except UnboundLocalError: pass
+
+        if st.button("Reveal Calculations", key = 'calculations_table_P1'):
+            P1[:3] = gas_equations(q,None,p2,D,G,L,t,z,mu,"estimate upstream pressure")
+            P1[4],f = general_gas_equation(q,None,p2,D,G,z,L,t,mu,"estimate upstream pressure")
+            
+            P1[3] = NeqSim_calculations(q,D,df_comp,t,P1[0],p2,L,"estimate upstream pressure")
+            
+            df_result = pd.DataFrame(df_summary)
+            df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,P1[4],p2,t,m_wt,k,rho2,L,z)
+            df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,P1[3],p2,t,m_wt,k,rho2,L,z)
+            
+            df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,P1[0],p2,t,m_wt,k,rho2,L,z)
+            df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,P1[1],p2,t,m_wt,k,rho2,L,z)
+            df_result['Weyouth'] = Summary_calculations(q,D,G,mu,0.95,P1[2],p2,t,m_wt,k,rho2,L,z)
+            st.dataframe(df_result)
+            graph_NeqSim(q,D,df_comp,t,P1[3],L)
+    elif s1 == "Gas - estimate Downstream pressure (kg/cm2.a)":
+        
+        df_gas_modified = df_gas.copy()
+        df_gas_modified['input'] = 0.00
+        df_gas_modified.rename(index={'P1 (Kg/cm2)': 'Flow Rate (Std.m3/hr)','P2(Kg/cm2)':'P1 (Kg/cm2)'}, inplace=True)
+        edited_df = st.experimental_data_editor(df_gas_modified)
+        
+        
+        
+        q,p1,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
+        if sum(edited_df['input']) != 0:
+            try:
+                D = fluids.nearest_pipe(NPS=D)[1]
+            except ValueError: pass
+            P2 = [0,0,0,0,0,0,0,0,0,0,0]
+            try:
+                    df_comp = choose_composition()
+                    
+                    z1, m_wt,Pr1,Tr1 = Z_calculations(df_comp,t,p1)
+                    
+                    z = z1
+                    G = m_wt/29
+                    mu,rho1 = get_viscosity(df_comp,p1,t)
+                    k = k_calculations(df_comp,df_comp_table,t,t)
+                    
+                    
+                    
+            except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+            except UnboundLocalError: pass
+
+        if st.button("Reveal Calculations", key = 'calculations_table_P2'):
+            P2[:3] = gas_equations(q,p1,None,D,G,L,t,z,mu,"estimate downstream pressure")
+            P2[4],f = general_gas_equation(q,p1,None,D,G,z,L,t,mu,"estimate downstream pressure")
+            
+            P2[3] = NeqSim_calculations(q,D,df_comp,t,p1,P2[0],L,"estimate downstream pressure")
+            
+            df_result = pd.DataFrame(df_summary)
+            df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,p1,P2[4],t,m_wt,k,rho1,L,z)
+            df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,p1,P2[3],t,m_wt,k,rho1,L,z)
+            
+            df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[0],t,m_wt,k,rho1,L,z)
+            df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[1],t,m_wt,k,rho1,L,z)
+            df_result['Weyouth'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[2],t,m_wt,k,rho1,L,z)
+            st.dataframe(df_result)
+            graph_NeqSim(q,D,df_comp,t,p1,L)
+    elif s1 == 'Liquid':
         def Darcy_equation(Q,L,D,rho_liq,mu):
+                Q = Q /3600
+                D = fluids.nearest_pipe(NPS=D)[1]
+                mu = mu*0.001
                 A = np.pi * (D**2) * 0.25
                 v_liq = Q/A 
                 f=0.02
-                e = 0
+                e = 0.00005
                 error = 10
                 while error > 0.0001:
                     Re = (rho_liq*v_liq*D)/mu
@@ -361,15 +604,110 @@ def main():
         
                 return dp,v_liq,Re,f,e
         df_liq['input'] = 0.00
-        edited_df = st.experimental_data_editor(df_liq.iloc[:7,:])
-        p1,t,Q,rho_liq, mu,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0]
-        Q = Q /3600
-        D = D*25.4*0.001
-        mu = mu*0.001
-        if st.button("Reveal Calculations", key = 'calculations_tableLiq'):
-            dp,v,Re,f,e = Darcy_equation(Q,L,D,rho_liq,mu)
-            p2 = p1-dp
-            df_liq['input'] = [p1,t,Q,rho_liq, mu,L,D,p2,dp,v,Re,f,e]
-            st.dataframe(df_liq)
+        s2 = st.selectbox('Calculate NPSHa?',('No','Yes'), key = 'NPSHa')
+        if s2 == 'No':
+            edited_df = st.experimental_data_editor(df_liq.iloc[:7,:])
+            p1,t,Q,rho_liq, mu,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0]
+            
+            
+            
+            if st.button("Reveal Calculations", key = 'calculations_tableLiq'):
+                dp,v,Re,f,e = Darcy_equation(Q,L,D,rho_liq,mu)
+                p2 = p1-dp
+                df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],0] = [p1,t,Q,rho_liq, mu,L,D,p2,dp,v,Re,f,e]
+                st.dataframe(df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],0])
+        else: 
+            edited_df = st.experimental_data_editor(df_liq.iloc[:9,:])
+            p1,t,Q,rho_liq, mu,L,D,H,Vp = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0],edited_df.iloc[7,0],edited_df.iloc[8,0]
+            
+            if st.button("Reveal Calculations", key = 'calculations_tableLiq'):
+                dp,v,Re,f,e = Darcy_equation(Q,L,D,rho_liq,mu)
+                p2 = p1-dp
+                NPSHa = (p2 - Vp - 1.03323)*10/(rho_liq*0.001)+H
+                df_liq['input'] = [p1,t,Q,rho_liq, mu,L,D,H, Vp ,p2,dp,v,Re,f,e,NPSHa]
+                st.dataframe(df_liq) 
+    elif s1=='Check Standards for Line Sizing':
+       
+        from pandas.api.types import (is_categorical_dtype,is_datetime64_any_dtype,is_numeric_dtype,is_object_dtype,)
+
+
+
+        def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
+            """
+            Adds a UI on top of a dataframe to let viewers filter columns
+
+            Args:
+                df (pd.DataFrame): Original dataframe
+
+            Returns:
+                pd.DataFrame: Filtered dataframe
+            """
+            modify = st.checkbox("Add filters")
+
+            if not modify:
+                return df
+
+            df = df.copy()
+
+            # Try to convert datetimes into a standard format (datetime, no timezone)
+            for col in df.columns:
+                if is_object_dtype(df[col]):
+                    try:
+                        df[col] = pd.to_datetime(df[col])
+                    except Exception:
+                        pass
+
+                if is_datetime64_any_dtype(df[col]):
+                    df[col] = df[col].dt.tz_localize(None)
+
+            modification_container = st.container()
+
+            with modification_container:
+                to_filter_columns = st.multiselect("Filter dataframe on", df.columns)
+                for column in to_filter_columns:
+                    left, right = st.columns((1, 20))
+                    # Treat columns with < 10 unique values as categorical
+                    if is_categorical_dtype(df[column]) or df[column].nunique() < 10:
+                        user_cat_input = right.multiselect(
+                            f"Values for {column}",
+                            df[column].unique(),
+                            default=list(df[column].unique()),
+                        )
+                        df = df[df[column].isin(user_cat_input)]
+                    elif is_numeric_dtype(df[column]):
+                        _min = float(df[column].min())
+                        _max = float(df[column].max())
+                        step = (_max - _min) / 100
+                        user_num_input = right.slider(
+                            f"Values for {column}",
+                            min_value=_min,
+                            max_value=_max,
+                            value=(_min, _max),
+                            step=step,
+                        )
+                        df = df[df[column].between(*user_num_input)]
+                    elif is_datetime64_any_dtype(df[column]):
+                        user_date_input = right.date_input(
+                            f"Values for {column}",
+                            value=(
+                                df[column].min(),
+                                df[column].max(),
+                            ),
+                        )
+                        if len(user_date_input) == 2:
+                            user_date_input = tuple(map(pd.to_datetime, user_date_input))
+                            start_date, end_date = user_date_input
+                            df = df.loc[df[column].between(start_date, end_date)]
+                    else:
+                        user_text_input = right.text_input(
+                            f"Search in {column}",
+                        )
+                        if user_text_input:
+                            df = df[df[column].astype(str).str.contains(user_text_input)]
+
+            return df
+        df = pd.read_csv('http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/criteria.csv', index_col=[0])
+        st.dataframe(filter_dataframe(df))
+        st.write('Based On an Excel sheet Compiled by: Ajay S. Satpute')
 if __name__ == '__main__':
     main()
