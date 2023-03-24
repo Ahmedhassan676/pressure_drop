@@ -1,9 +1,9 @@
-﻿,General Gas,Weyouth,Panhandle_A,Panhandle_B,NeqSim Simulator
+﻿,General Gas,NeqSim Simulator,Weymouth,Panhandle_A,Panhandle_B
 P1 (Kg/cm2),,,,,
 P2(Kg/cm2),,,,,
 T (oC),,,,,
 L (m),,,,,
-D (in),,,,,
+D (m),,,,,
 flow_rate (Std_m3/hr),,,,,
 flow_rate (Nm3/hr),,,,,
 Actual_flow_rate (m3/hr),,,,,
