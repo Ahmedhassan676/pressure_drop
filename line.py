@@ -10,7 +10,8 @@ from neqsim.process.processTools import *
 from neqsim import methods
 from neqsim.thermo import fluid, TPflash, createfluid2
 from neqsim.process import pipe, pipeline, clearProcess, stream, runProcess
-
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
 df_gas = pd.read_csv(url, index_col=[0])
