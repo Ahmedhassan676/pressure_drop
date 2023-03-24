@@ -11,13 +11,13 @@ from neqsim import methods
 from neqsim.thermo import fluid, TPflash, createfluid2
 from neqsim.process import pipe, pipeline, clearProcess, stream, runProcess
 
-url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
+url ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
 df_gas = pd.read_csv(url, index_col=[0])
-url_1 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp.csv'
+url_1 = 'https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp.csv'
 df_comp_table = pd.read_csv(url_1)
-url_2 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
+url_2 ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
 df_summary = pd.read_csv(url_2, index_col=[0])
-url_3 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
+url_3 ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
 df_liq = pd.read_csv(url_3, index_col=[0])
 
 def k_calculations(df,df_comp_table,suc_t,disch_t):
@@ -705,7 +705,7 @@ def main():
                             df = df[df[column].astype(str).str.contains(user_text_input)]
 
             return df
-        df = pd.read_csv('http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/criteria.csv', index_col=[0])
+        df = pd.read_csv('https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/criteria.csv', index_col=[0])
         st.dataframe(filter_dataframe(df))
         st.write('Based On an Excel sheet Compiled by: Ajay S. Satpute')
 if __name__ == '__main__':
