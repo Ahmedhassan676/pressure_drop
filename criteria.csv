@@ -1,119 +1,119 @@
-﻿Sr. No.,Phase,Fluid,Sand presence,MOC,Condition,Pipe NB,Vmax,Vmax,Vmin,ΔP criteria,ρV2 criteria,Mach no. criteria,Max. allowed back pressure,Referred standard,Remarks
-1,Single phase,Liquid,No/NA,NA,Pressurized service,NA,15 ft/s,4.6 m/s,NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-2,Single phase,Liquid,Yes,NA,Pressurized service,NA,NA,NA,0.9 m/s,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-3,Single phase,Liquid,No/NA,NA,Reciprocating pump (≤ 250 rpm) suction,NA,2 ft/s (typical flow velocities),0.6 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-4,Single phase,Liquid,No/NA,NA,Reciprocating pump (251 - 330 rpm) suction,NA,1.5 ft/s (typical flow velocities),0.5 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-5,Single phase,Liquid,No/NA,NA,Reciprocating pump (> 330 rpm) suction,NA,1 ft/s (typical flow velocities),0.3 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-6,Single phase,Liquid,No/NA,NA,Centrifugal pump suction,NA,3 ft/s (typical flow velocities),0.9 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-7,Single phase,Liquid,No/NA,NA,Reciprocating pump (≤ 250 rpm) discharge,NA,6 ft/s (typical flow velocities),1.8 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-8,Single phase,Liquid,No/NA,NA,Reciprocating pump (251 - 330 rpm) discharge,NA,4.5 ft/s (typical flow velocities),1.4 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-9,Single phase,Liquid,No/NA,NA,Reciprocating pump (> 330 rpm) discharge,NA,3 ft/s (typical flow velocities),0.9 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-10,Single phase,Liquid,No/NA,NA,Centrifugal pump discharge,NA,9 ft/s (typical flow velocities),2.7 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-11,Single phase,Gas,No/NA,NA,Pressurized service,NA,60 ft/s,18.3 m/s,NA,NA,NA,NA,NA,"API 14E, 5th Edition",Velocity criteria (< 60 ft/s) should not be interpreted as an absolute criteria
-12,Two phase,Gas & Liquid,No/NA,NA,Continuous service,NA,"100/√ρm, ft/s","100/√ρm, ft/s",NA,NA,NA,NA,NA,"API 14E, 5th Edition",ρm is in lb/ft3
-13,Two phase,Gas & Liquid,No/NA,NA,Intermittent service,NA,"125/√ρm, ft/s","125/√ρm, ft/s",NA,NA,NA,NA,NA,"API 14E, 5th Edition",ρm is in lb/ft3
-14,Two phase,Gas & Liquid,No/NA,NA,Pressurized service,NA,NA,NA,3.1 m/s,NA,NA,NA,NA,"API 14E, 5th Edition",NA
-15,Single phase,Liquid,Yes,NA,Drain line,NA,9.8 ft/s,3 m/s,0.75 m/s,NA,NA,NA,NA,Maersk Oil standard,NA
-16,Single phase,Liquid,No/NA,CS,Pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-17,Single phase,Liquid,Yes,CS,Pressurized service,NA,16.4 ft/s,5 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-18,Single phase,Liquid with large quantities of mud,Yes,CS,Pressurized service,NA,13.1 ft/s,4 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-19,Single phase,Untreated sea water,No/NA,CS,Pressurized service,NA,9.8 ft/s,3 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-20,Single phase,Deoxygenated sea water,No/NA,CS,Pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-21,Single phase,Liquid,No/NA,SS/Ti,Pressurized service,NA,23 ft/s,7 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-22,Single phase,Liquid,Yes,SS/Ti,Pressurized service,NA,23 ft/s,7 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-23,Single phase,Liquid with large quantities of mud,Yes,SS/Ti,Pressurized service,NA,13.1 ft/s,4 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-24,Single phase,Untreated sea water,No/NA,SS/Ti,Pressurized service,NA,23 ft/s,7 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-25,Single phase,Deoxygenated sea water,No/NA,SS/Ti,Pressurized service,NA,23 ft/s,7 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-26,Single phase,Liquid,No/NA,CuNi,Pressurized service,NA,9.8 ft/s,3 m/s,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-27,Single phase,Liquid,Yes,CuNi,Pressurized service,NA,NA,NA,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-28,Single phase,Liquid with large quantities of mud,Yes,CuNi,Pressurized service,NA,NA,NA,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-29,Single phase,Untreated sea water,No/NA,CuNi,Pressurized service,NA,9.8 ft/s,3 m/s,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-30,Single phase,Deoxygenated sea water,No/NA,CuNi,Pressurized service,NA,9.8 ft/s,3 m/s,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-31,Single phase,Liquid,No/NA,GRP,Pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-32,Single phase,Liquid,Yes,GRP,Pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-33,Single phase,Liquid with large quantities of mud,Yes,GRP,Pressurized service,NA,NA,NA,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-34,Single phase,Untreated sea water,No/NA,GRP,Pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-35,Single phase,Deoxygenated sea water,No/NA,GRP,Pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-36,Single phase,Sub-cooled liquid,No/NA,NA,Centrifugal pump suction,NA,NA,NA,NA,< 0.25 bar/100 m,NA,NA,NA,"Norsok standard P-001, 5th Edition","Vmax depends upon fluid (if with or without sand, untreated or deoxygenated seawater) and pipe MOC"
-37,Single phase,Boiling liquid,No/NA,NA,Centrifugal pump suction,NA,NA,NA,NA,< 0.05 bar/100 m,NA,NA,NA,"Norsok standard P-001, 5th Edition","Vmax depends upon fluid (if with or without sand, untreated or deoxygenated seawater) and pipe MOC"
-38,Single phase,Liquid,No/NA,NA,Centrifugal pump discharge,NA,NA,NA,NA,< 0.9 bar/100 m,NA,NA,NA,"Norsok standard P-001, 5th Edition","Vmax depends upon fluid (if with or without sand, untreated or deoxygenated seawater) and pipe MOC"
-39,Single phase,Gas,No/NA,NA,Vent line for atmospheric system,NA,NA,NA,NA,< 0.005 bar,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-40,Single phase,Gas,No/NA,NA,Pressurized service,NA,"175/√ρ, m/s or 60 m/s whichever is lower","175/√ρ, m/s or 60 m/s whichever is lower",NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",ρ is in kg/m3
-41,Single phase,Liquid,No/NA,NA,Pressurized service (operating pressure 0 to 35 barg),NA,NA,NA,NA,0.001 to 0.11 bar/100 m (recommended pressure drop),NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-42,Single phase,Liquid,No/NA,NA,Pressurized service (operating pressure 35 to 138 barg),NA,NA,NA,NA,0.11 to 0.27 bar/100 m (recommended pressure drop),NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
-43,Single phase,Liquid,No/NA,NA,Pressurized service (operating pressure more than 138 barg),NA,NA,NA,NA,< P/500 bar/100 m,NA,NA,NA,"Norsok standard P-001, 5th Edition",P is operating pressure in bara
-44,Two phase,Gas & Liquid,No/NA,NA,Pressurized service,,"183/√ρmix, m/s","183/√ρmix, m/s",NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",ρmix is in kg/m3
-45,Single phase,Gas,No/NA,NA,Flare line,NA,NA,NA,NA,NA,< 200000 kg/ms2,< 0.6,,"Norsok standard P-001, 5th Edition",Both conditions to be satisfied
-46,Single phase,Gas,No/NA,NA,Vent line,NA,NA,NA,NA,NA,NA,NA,0.07 barg,"Norsok standard P-001, 5th Edition",NA
-47,Single phase,Liquid,Yes,NA,Drain line,NA,NA,NA,0.8 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
-48,Single phase,Liquid,Yes,NA,Drain line with heavy amount of sand,NA,NA,NA,1.2 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
-49,Single phase,Liquid,Yes,NA,Drain line (oil free),NA,9.8 ft/s,3 m/s,0.8 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
-50,Single phase,Liquid,Yes,NA,Drain line (oil contaminated),NA,4.9 ft/s,1.5 m/s,0.8 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
-51,Single phase,Liquid,Yes,NA,Drain line (domestic sewage),NA,4.9 ft/s,1.5 m/s,0.8 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
-52,Single phase,Liquid,No/NA,NA,Pump suction (liquid at bubble point or with dissolved gas),"2""",2 ft/s,0.6 m/s,NA,< 0.9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-53,Single phase,Liquid,No/NA,NA,Pump suction (liquid at bubble point or with dissolved gas),"3"" to 6""",3 ft/s,0.9 m/s,NA,< 0.9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-54,Single phase,Liquid,No/NA,NA,Pump suction (liquid at bubble point or with dissolved gas),"8"" to 18""",3.9 ft/s,1.2 m/s,NA,< 0.9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-55,Single phase,Liquid,No/NA,NA,Pump suction (liquid at bubble point or with dissolved gas),"> 18""",4.9 ft/s,1.5 m/s,NA,< 0.9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-56,Single phase,Liquid,No/NA,NA,Pump suction (non-boiling liquid),"2""",3 ft/s,0.9 m/s,NA,< 3.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-57,Single phase,Liquid,No/NA,NA,Pump suction (non-boiling liquid),"3"" to 6""",3.9 ft/s,1.2 m/s,NA,< 3.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-58,Single phase,Liquid,No/NA,NA,Pump suction (non-boiling liquid),"8"" to 18""",4.9 ft/s,1.5 m/s,NA,< 3.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-59,Single phase,Liquid,No/NA,NA,Pump suction (non-boiling liquid),"> 18""",5.9 ft/s,1.8 m/s,NA,< 3.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-60,Single phase,Liquid,No/NA,NA,Pump discharge (pressure < 50 barg),"2""",14.8 ft/s,4.5 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-61,Single phase,Liquid,No/NA,NA,Pump discharge (pressure < 50 barg),"3"" to 6""",14.8 ft/s,4.5 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-62,Single phase,Liquid,No/NA,NA,Pump discharge (pressure < 50 barg),"8"" to 18""",14.8 ft/s,4.5 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-63,Single phase,Liquid,No/NA,NA,Pump discharge (pressure < 50 barg),"> 18""",19.7 ft/s,6 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-64,Single phase,Liquid,No/NA,NA,Pump discharge (pressure > 50 barg),"2""",14.8 ft/s,4.5 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-65,Single phase,Liquid,No/NA,NA,Pump discharge (pressure > 50 barg),"3"" to 6""",14.8 ft/s,4.5 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-66,Single phase,Liquid,No/NA,NA,Pump discharge (pressure > 50 barg),"8"" to 18""",14.8 ft/s,4.5 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-67,Single phase,Liquid,No/NA,NA,Pump discharge (pressure > 50 barg),"> 18""",19.7 ft/s,6 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-68,Single phase,Liquid,No/NA,NA,Pump discharge (pressure < 50 barg and Storage tank inlet or in loading),"2""",9.8 ft/s,3 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-69,Single phase,Liquid,No/NA,NA,Pump discharge (pressure < 50 barg and Storage tank inlet or in loading),"3"" to 6""",9.8 ft/s,3 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-70,Single phase,Liquid,No/NA,NA,Pump discharge (pressure < 50 barg and Storage tank inlet or in loading),"8"" to 18""",9.8 ft/s,3 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-71,Single phase,Liquid,No/NA,NA,Pump discharge (pressure < 50 barg and Storage tank inlet or in loading),"> 18""",9.8 ft/s,3 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-72,Single phase,Liquid,No/NA,NA,Pump discharge (pressure > 50 barg and Storage tank inlet or in loading),"2""",9.8 ft/s,3 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-73,Single phase,Liquid,No/NA,NA,Pump discharge (pressure > 50 barg and Storage tank inlet or in loading),"3"" to 6""",9.8 ft/s,3 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-74,Single phase,Liquid,No/NA,NA,Pump discharge (pressure > 50 barg and Storage tank inlet or in loading),"8"" to 18""",9.8 ft/s,3 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-75,Single phase,Liquid,No/NA,NA,Pump discharge (pressure > 50 barg and Storage tank inlet or in loading),"> 18""",9.8 ft/s,3 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-76,Single phase,Liquid,No/NA,NA,Drain line,NA,2 ft/s normal velocity,0.6 m/s normal velocity,NA,< 0.45 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-77,Single phase,Liquid,No/NA,CS,Sea water lines,NA,11.5 ft/s,3.5 m/s,2 m/s,NA,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-78,Single phase,Liquid,No/NA,NA,Steam condensate return,NA,4.9 ft/s,1.5 m/s,NA,NA,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-79,Single phase,Gas (excluding flare line),No/NA,NA,Continuous operating (P ≤ 20 barg),NA,NA,NA,NA,NA,< 6000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-80,Single phase,Gas (excluding flare line),No/NA,NA,Continuous operating (20 < P ≤ 50 barg),NA,NA,NA,NA,NA,< 7500 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-81,Single phase,Gas (excluding flare line),No/NA,NA,Continuous operating (50 < P ≤ 80 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-82,Single phase,Gas (excluding flare line),No/NA,NA,Continuous operating (80 < P ≤ 120 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-83,Single phase,Gas (excluding flare line),No/NA,NA,Continuous operating (P > 120 barg),NA,NA,NA,NA,NA,< 20000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-84,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor anti-surge (P ≤ 50 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-85,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor anti-surge (50 < P ≤ 80 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-86,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor anti-surge (P > 80 barg),NA,NA,NA,NA,NA,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-87,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor suction (P ≤ 50 barg),NA,NA,NA,NA,< 0.7 bar/km,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-88,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor suction (50 < P ≤ 80 barg),NA,NA,NA,NA,< 0.7 bar/km,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-89,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor suction (P > 80 barg),NA,NA,NA,NA,< 0.7 bar/km,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-90,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor discharge (P ≤ 50 barg),NA,NA,NA,NA,< 1.15 bar/km,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-91,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor discharge (50 < P ≤ 80 barg),NA,NA,NA,NA,< 1.15 bar/km,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-92,Single phase,Gas (excluding flare line),No/NA,NA,Dis-continuous operating - compressor discharge (P > 80 barg),NA,NA,NA,NA,< 1.15 bar/km,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-93,Single phase,Steam,No/NA,NA,"P ≤ 10 barg, L ≤ 200 m",NA,NA,NA,NA,< 1 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-94,Single phase,Steam,No/NA,NA,"P ≤ 10 barg, L > 200 m",NA,NA,NA,NA,< 0.25 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-95,Single phase,Steam,No/NA,NA,"10 < P ≤ 30 barg, L ≤ 200 m",NA,138 ft/s,42 m/s,NA,< 2.3 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-96,Single phase,Steam,No/NA,NA,"10 < P ≤ 30 barg, L > 200 m",NA,138 ft/s,42 m/s,NA,< 1 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-97,Single phase,Steam,No/NA,NA,"P > 30 barg, L ≤ 200 m",NA,98 ft/s,30 m/s,NA,< 2.3 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-98,Single phase,Steam,No/NA,NA,"P > 30 barg, L > 200 m",NA,98 ft/s,30 m/s,NA,< 1 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-99,Two phase,Gas & Liquid,No/NA,NA,Continuous operating (P ≤ 20 barg),NA,NA,NA,NA,NA,< 6000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-100,Two phase,Gas & Liquid,No/NA,NA,Continuous operating (20 < P ≤ 50 barg),NA,NA,NA,NA,NA,< 7500 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-101,Two phase,Gas & Liquid,No/NA,NA,Continuous operating (50 < P ≤ 80 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-102,Two phase,Gas & Liquid,No/NA,NA,Continuous operating (80 < P ≤ 120 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-103,Two phase,Gas & Liquid,No/NA,NA,Continuous operating (P > 120 barg),NA,NA,NA,NA,NA,< 20000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-104,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor anti-surge (P ≤ 50 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-105,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor anti-surge (50 < P ≤ 80 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-106,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor anti-surge (P > 80 barg),NA,NA,NA,NA,NA,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-107,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor suction (P ≤ 50 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-108,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor suction (50 < P ≤ 80 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-109,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor suction (P > 80 barg),NA,NA,NA,NA,NA,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-110,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor discharge (P ≤ 50 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-111,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor discharge (50 < P ≤ 80 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-112,Two phase,Gas & Liquid,No/NA,NA,Dis-continuous operating - compressor discharge (P > 80 barg),NA,NA,NA,NA,NA,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
-113,Single phase,Flare gas,No/NA,NA,"Upstream of relieving device, Line size ≤ 2""",NA,NA,NA,NA,NA,≤ 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-114,Single phase,Flare gas,No/NA,NA,"Upstream of relieving device, Operating pressure ≤ 50 barg",NA,NA,NA,NA,NA,≤ 30000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-115,Single phase,Flare gas,No/NA,NA,"Upstream of relieving device, Operating pressure > 50 barg",NA,NA,NA,NA,NA,≤ 50000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-116,Single phase,Flare gas,No/NA,NA,"Upstream of downstream device, Intermittent flow",NA,NA,NA,NA,NA,≤ 150000 kg/ms2,< 0.7,NA,"Total standard GS-EP-ECP-103, Revision 02",For ρ > 100000 kg/ms2 vibration and line supports are required
-117,Single phase,Flare gas,No/NA,NA,"Upstream of downstream device, Continuous flow",NA,NA,NA,NA,NA,≤ 50000 kg/ms2,< 0.35,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-118,Two phase,Flare gas and condensate,No/NA,NA,Upstream of relieving device,NA,NA,NA,NA,NA,≤ 50000 kg/ms2,< 0.25,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+﻿Sr. No.,Phase,Fluid,Sand presence,MOC,Condition,Pipe NB,Vmax,Vmax_1,Vmin,ΔP criteria,ρV2 criteria,Mach no. criteria,Max. allowed back pressure,Referred standard,Remarks
+1,single phase,liquid,no/na,na,pressurized service,NA,15 ft/s,4.6 m/s,NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+2,single phase,liquid,yes,na,pressurized service,NA,NA,NA,0.9 m/s,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+3,single phase,liquid,no/na,na,reciprocating pump (≤ 250 rpm) suction,NA,2 ft/s (typical flow velocities),0.6 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+4,single phase,liquid,no/na,na,reciprocating pump (251 - 330 rpm) suction,NA,1.5 ft/s (typical flow velocities),0.5 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+5,single phase,liquid,no/na,na,reciprocating pump (> 330 rpm) suction,NA,1 ft/s (typical flow velocities),0.3 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+6,single phase,liquid,no/na,na,centrifugal pump suction,NA,3 ft/s (typical flow velocities),0.9 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+7,single phase,liquid,no/na,na,reciprocating pump (≤ 250 rpm) discharge,NA,6 ft/s (typical flow velocities),1.8 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+8,single phase,liquid,no/na,na,reciprocating pump (251 - 330 rpm) discharge,NA,4.5 ft/s (typical flow velocities),1.4 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+9,single phase,liquid,no/na,na,reciprocating pump (> 330 rpm) discharge,NA,3 ft/s (typical flow velocities),0.9 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+10,single phase,liquid,no/na,na,centrifugal pump discharge,NA,9 ft/s (typical flow velocities),2.7 m/s (typical flow velocities),NA,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+11,single phase,gas,no/na,na,pressurized service,NA,60 ft/s,18.3 m/s,NA,NA,NA,NA,NA,"API 14E, 5th Edition",Velocity criteria (< 60 ft/s) should not be interpreted as an absolute criteria
+12,two phase,gas & liquid,no/na,na,continuous service,NA,"100/√ρm, ft/s","100/√ρm, ft/s",NA,NA,NA,NA,NA,"API 14E, 5th Edition",ρm is in lb/ft3
+13,two phase,gas & liquid,no/na,na,intermittent service,NA,"125/√ρm, ft/s","125/√ρm, ft/s",NA,NA,NA,NA,NA,"API 14E, 5th Edition",ρm is in lb/ft3
+14,two phase,gas & liquid,no/na,na,pressurized service,NA,NA,NA,3.1 m/s,NA,NA,NA,NA,"API 14E, 5th Edition",NA
+15,single phase,liquid,yes,na,drain line,NA,9.8 ft/s,3 m/s,0.75 m/s,NA,NA,NA,NA,Maersk Oil standard,NA
+16,single phase,liquid,no/na,cs,pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+17,single phase,liquid,yes,cs,pressurized service,NA,16.4 ft/s,5 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+18,single phase,liquid with large quantities of mud,yes,cs,pressurized service,NA,13.1 ft/s,4 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+19,single phase,untreated sea water,no/na,cs,pressurized service,NA,9.8 ft/s,3 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+20,single phase,deoxygenated sea water,no/na,cs,pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+21,single phase,liquid,no/na,ss/ti,pressurized service,NA,23 ft/s,7 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+22,single phase,liquid,yes,ss/ti,pressurized service,NA,23 ft/s,7 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+23,single phase,liquid with large quantities of mud,yes,ss/ti,pressurized service,NA,13.1 ft/s,4 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+24,single phase,untreated sea water,no/na,ss/ti,pressurized service,NA,23 ft/s,7 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+25,single phase,deoxygenated sea water,no/na,ss/ti,pressurized service,NA,23 ft/s,7 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+26,single phase,liquid,no/na,cuni,pressurized service,NA,9.8 ft/s,3 m/s,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+27,single phase,liquid,yes,cuni,pressurized service,NA,NA,NA,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+28,single phase,liquid with large quantities of mud,yes,cuni,pressurized service,NA,NA,NA,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+29,single phase,untreated sea water,no/na,cuni,pressurized service,NA,9.8 ft/s,3 m/s,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+30,single phase,deoxygenated sea water,no/na,cuni,pressurized service,NA,9.8 ft/s,3 m/s,1 m/s,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+31,single phase,liquid,no/na,grp,pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+32,single phase,liquid,yes,grp,pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+33,single phase,liquid with large quantities of mud,yes,grp,pressurized service,NA,NA,NA,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+34,single phase,untreated sea water,no/na,grp,pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+35,single phase,deoxygenated sea water,no/na,grp,pressurized service,NA,19.7 ft/s,6 m/s,NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+36,single phase,sub-cooled liquid,no/na,na,centrifugal pump suction,NA,NA,NA,NA,< 0.25 bar/100 m,NA,NA,NA,"Norsok standard P-001, 5th Edition","Vmax depends upon fluid (if with or without sand, untreated or deoxygenated seawater) and pipe MOC"
+37,single phase,boiling liquid,no/na,na,centrifugal pump suction,NA,NA,NA,NA,< 0.05 bar/100 m,NA,NA,NA,"Norsok standard P-001, 5th Edition","Vmax depends upon fluid (if with or without sand, untreated or deoxygenated seawater) and pipe MOC"
+38,single phase,liquid,no/na,na,centrifugal pump discharge,NA,NA,NA,NA,< 0.9 bar/100 m,NA,NA,NA,"Norsok standard P-001, 5th Edition","Vmax depends upon fluid (if with or without sand, untreated or deoxygenated seawater) and pipe MOC"
+39,single phase,gas,no/na,na,vent line for atmospheric system,NA,NA,NA,NA,< 0.005 bar,NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+40,single phase,gas,no/na,na,pressurized service,NA,"175/√ρ, m/s or 60 m/s whichever is lower","175/√ρ, m/s or 60 m/s whichever is lower",NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",ρ is in kg/m3
+41,single phase,liquid,no/na,na,pressurized service (operating pressure 0 to 35 barg),NA,NA,NA,NA,0.001 to 0.11 bar/100 m (recommended pressure drop),NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+42,single phase,liquid,no/na,na,pressurized service (operating pressure 35 to 138 barg),NA,NA,NA,NA,0.11 to 0.27 bar/100 m (recommended pressure drop),NA,NA,NA,"Norsok standard P-001, 5th Edition",NA
+43,single phase,liquid,no/na,na,pressurized service (operating pressure more than 138 barg),NA,NA,NA,NA,< P/500 bar/100 m,NA,NA,NA,"Norsok standard P-001, 5th Edition",P is operating pressure in bara
+44,two phase,gas & liquid,no/na,na,pressurized service,,"183/√ρmix, m/s","183/√ρmix, m/s",NA,NA,NA,NA,NA,"Norsok standard P-001, 5th Edition",ρmix is in kg/m3
+45,single phase,gas,no/na,na,flare line,NA,NA,NA,NA,NA,< 200000 kg/ms2,< 0.6,,"Norsok standard P-001, 5th Edition",Both conditions to be satisfied
+46,single phase,gas,no/na,na,vent line,NA,NA,NA,NA,NA,NA,NA,0.07 barg,"Norsok standard P-001, 5th Edition",NA
+47,single phase,liquid,yes,na,drain line,NA,NA,NA,0.8 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
+48,single phase,liquid,yes,na,drain line with heavy amount of sand,NA,NA,NA,1.2 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
+49,single phase,liquid,yes,na,drain line (oil free),NA,9.8 ft/s,3 m/s,0.8 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
+50,single phase,liquid,yes,na,drain line (oil contaminated),NA,4.9 ft/s,1.5 m/s,0.8 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
+51,single phase,liquid,yes,na,drain line (domestic sewage),NA,4.9 ft/s,1.5 m/s,0.8 m/s,NA,NA,NA,NA,"Total standard GS-EP-SAF-228A, Revision 02",NA
+52,single phase,liquid,no/na,na,pump suction (liquid at bubble point or with dissolved gas),"2""",2 ft/s,0.6 m/s,NA,< 0.9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+53,single phase,liquid,no/na,na,pump suction (liquid at bubble point or with dissolved gas),"3"" to 6""",3 ft/s,0.9 m/s,NA,< 0.9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+54,single phase,liquid,no/na,na,pump suction (liquid at bubble point or with dissolved gas),"8"" to 18""",3.9 ft/s,1.2 m/s,NA,< 0.9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+55,single phase,liquid,no/na,na,pump suction (liquid at bubble point or with dissolved gas),"> 18""",4.9 ft/s,1.5 m/s,NA,< 0.9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+56,single phase,liquid,no/na,na,pump suction (non-boiling liquid),"2""",3 ft/s,0.9 m/s,NA,< 3.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+57,single phase,liquid,no/na,na,pump suction (non-boiling liquid),"3"" to 6""",3.9 ft/s,1.2 m/s,NA,< 3.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+58,single phase,liquid,no/na,na,pump suction (non-boiling liquid),"8"" to 18""",4.9 ft/s,1.5 m/s,NA,< 3.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+59,single phase,liquid,no/na,na,pump suction (non-boiling liquid),"> 18""",5.9 ft/s,1.8 m/s,NA,< 3.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+60,single phase,liquid,no/na,na,pump discharge (pressure < 50 barg),"2""",14.8 ft/s,4.5 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+61,single phase,liquid,no/na,na,pump discharge (pressure < 50 barg),"3"" to 6""",14.8 ft/s,4.5 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+62,single phase,liquid,no/na,na,pump discharge (pressure < 50 barg),"8"" to 18""",14.8 ft/s,4.5 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+63,single phase,liquid,no/na,na,pump discharge (pressure < 50 barg),"> 18""",19.7 ft/s,6 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+64,single phase,liquid,no/na,na,pump discharge (pressure > 50 barg),"2""",14.8 ft/s,4.5 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+65,single phase,liquid,no/na,na,pump discharge (pressure > 50 barg),"3"" to 6""",14.8 ft/s,4.5 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+66,single phase,liquid,no/na,na,pump discharge (pressure > 50 barg),"8"" to 18""",14.8 ft/s,4.5 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+67,single phase,liquid,no/na,na,pump discharge (pressure > 50 barg),"> 18""",19.7 ft/s,6 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+68,single phase,liquid,no/na,na,pump discharge (pressure < 50 barg and storage tank inlet or in loading),"2""",9.8 ft/s,3 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+69,single phase,liquid,no/na,na,pump discharge (pressure < 50 barg and storage tank inlet or in loading),"3"" to 6""",9.8 ft/s,3 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+70,single phase,liquid,no/na,na,pump discharge (pressure < 50 barg and storage tank inlet or in loading),"8"" to 18""",9.8 ft/s,3 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+71,single phase,liquid,no/na,na,pump discharge (pressure < 50 barg and storage tank inlet or in loading),"> 18""",9.8 ft/s,3 m/s,NA,< 4.5 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+72,single phase,liquid,no/na,na,pump discharge (pressure > 50 barg and storage tank inlet or in loading),"2""",9.8 ft/s,3 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+73,single phase,liquid,no/na,na,pump discharge (pressure > 50 barg and storage tank inlet or in loading),"3"" to 6""",9.8 ft/s,3 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+74,single phase,liquid,no/na,na,pump discharge (pressure > 50 barg and storage tank inlet or in loading),"8"" to 18""",9.8 ft/s,3 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+75,single phase,liquid,no/na,na,pump discharge (pressure > 50 barg and storage tank inlet or in loading),"> 18""",9.8 ft/s,3 m/s,NA,< 9 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+76,single phase,liquid,no/na,na,drain line,NA,2 ft/s normal velocity,0.6 m/s normal velocity,NA,< 0.45 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+77,single phase,liquid,no/na,cs,sea water lines,NA,11.5 ft/s,3.5 m/s,2 m/s,NA,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+78,single phase,liquid,no/na,na,steam condensate return,NA,4.9 ft/s,1.5 m/s,NA,NA,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+79,single phase,gas (excluding flare line),no/na,na,continuous operating (p ≤ 20 barg),NA,NA,NA,NA,NA,< 6000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+80,single phase,gas (excluding flare line),no/na,na,continuous operating (20 < p ≤ 50 barg),NA,NA,NA,NA,NA,< 7500 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+81,single phase,gas (excluding flare line),no/na,na,continuous operating (50 < p ≤ 80 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+82,single phase,gas (excluding flare line),no/na,na,continuous operating (80 < p ≤ 120 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+83,single phase,gas (excluding flare line),no/na,na,continuous operating (p > 120 barg),NA,NA,NA,NA,NA,< 20000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+84,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor anti-surge (p ≤ 50 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+85,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor anti-surge (50 < p ≤ 80 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+86,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor anti-surge (p > 80 barg),NA,NA,NA,NA,NA,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+87,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor suction (p ≤ 50 barg),NA,NA,NA,NA,< 0.7 bar/km,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+88,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor suction (50 < p ≤ 80 barg),NA,NA,NA,NA,< 0.7 bar/km,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+89,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor suction (p > 80 barg),NA,NA,NA,NA,< 0.7 bar/km,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+90,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor discharge (p ≤ 50 barg),NA,NA,NA,NA,< 1.15 bar/km,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+91,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor discharge (50 < p ≤ 80 barg),NA,NA,NA,NA,< 1.15 bar/km,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+92,single phase,gas (excluding flare line),no/na,na,dis-continuous operating - compressor discharge (p > 80 barg),NA,NA,NA,NA,< 1.15 bar/km,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+93,single phase,steam,no/na,na,"p ≤ 10 barg, l ≤ 200 m",NA,NA,NA,NA,< 1 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+94,single phase,steam,no/na,na,"p ≤ 10 barg, l > 200 m",NA,NA,NA,NA,< 0.25 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+95,single phase,steam,no/na,na,"10 < p ≤ 30 barg, l ≤ 200 m",NA,138 ft/s,42 m/s,NA,< 2.3 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+96,single phase,steam,no/na,na,"10 < p ≤ 30 barg, l > 200 m",NA,138 ft/s,42 m/s,NA,< 1 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+97,single phase,steam,no/na,na,"p > 30 barg, l ≤ 200 m",NA,98 ft/s,30 m/s,NA,< 2.3 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+98,single phase,steam,no/na,na,"p > 30 barg, l > 200 m",NA,98 ft/s,30 m/s,NA,< 1 bar/km,NA,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+99,two phase,gas & liquid,no/na,na,continuous operating (p ≤ 20 barg),NA,NA,NA,NA,NA,< 6000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+100,two phase,gas & liquid,no/na,na,continuous operating (20 < p ≤ 50 barg),NA,NA,NA,NA,NA,< 7500 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+101,two phase,gas & liquid,no/na,na,continuous operating (50 < p ≤ 80 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+102,two phase,gas & liquid,no/na,na,continuous operating (80 < p ≤ 120 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+103,two phase,gas & liquid,no/na,na,continuous operating (p > 120 barg),NA,NA,NA,NA,NA,< 20000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+104,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor anti-surge (p ≤ 50 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+105,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor anti-surge (50 < p ≤ 80 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+106,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor anti-surge (p > 80 barg),NA,NA,NA,NA,NA,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+107,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor suction (p ≤ 50 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+108,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor suction (50 < p ≤ 80 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+109,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor suction (p > 80 barg),NA,NA,NA,NA,NA,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+110,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor discharge (p ≤ 50 barg),NA,NA,NA,NA,NA,< 10000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+111,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor discharge (50 < p ≤ 80 barg),NA,NA,NA,NA,NA,< 15000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+112,two phase,gas & liquid,no/na,na,dis-continuous operating - compressor discharge (p > 80 barg),NA,NA,NA,NA,NA,< 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02","ρm is apparent density, Vm is apparent fluid velocity and to be used for ρm*Vm2 calculations"
+113,single phase,flare gas,no/na,na,"upstream of relieving device, line size ≤ 2""",NA,NA,NA,NA,NA,≤ 25000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+114,single phase,flare gas,no/na,na,"upstream of relieving device, operating pressure ≤ 50 barg",NA,NA,NA,NA,NA,≤ 30000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+115,single phase,flare gas,no/na,na,"upstream of relieving device, operating pressure > 50 barg",NA,NA,NA,NA,NA,≤ 50000 kg/ms2,NA,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+116,single phase,flare gas,no/na,na,"upstream of downstream device, intermittent flow",NA,NA,NA,NA,NA,≤ 150000 kg/ms2,< 0.7,NA,"Total standard GS-EP-ECP-103, Revision 02",For ρ > 100000 kg/ms2 vibration and line supports are required
+117,single phase,flare gas,no/na,na,"upstream of downstream device, continuous flow",NA,NA,NA,NA,NA,≤ 50000 kg/ms2,< 0.35,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
+118,two phase,flare gas and condensate,no/na,na,upstream of relieving device,NA,NA,NA,NA,NA,≤ 50000 kg/ms2,< 0.25,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
