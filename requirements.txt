@@ -4,3 +4,4 @@ numpy
 neqsim
 matplotlib
 fluids
+ssl
