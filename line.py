@@ -23,6 +23,9 @@ df_summary = pd.read_csv(url_2, index_col=[0])
 url_3 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
 df_liq = pd.read_csv(url_3, index_col=[0])
 
+def convert_data(df):
+     csv = df.to_csv(index=False).encode('utf-8')
+     return csv
 def find_nearest(D):
     array = np.array([0.5,0.75,1,1.5,2,3,4,5,6,8,10,12,14,16,18,20,24])
     idx = (np.abs(array - D)).argmin()
@@ -496,9 +499,10 @@ def main():
             df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
             df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
             df_result['Weymouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
-           
+            
 
             st.dataframe(df_result)
+            st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download1")
             graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
             
     elif s1 == "Gas - estimate Upstream pressure (kg/cm2.a)":
@@ -550,6 +554,7 @@ def main():
             df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,P1[1],p2,t,m_wt,k,rho2,L,z)
             df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,P1[2],p2,t,m_wt,k,rho2,L,z)
             st.dataframe(df_result)
+            st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download2")
             graph_NeqSim(q,D,df_comp,t,P1[3],L)
     elif s1 == "Gas - estimate Downstream pressure (kg/cm2.a)":
         st.write('## Estimation of Equivalent Length') 
@@ -598,13 +603,14 @@ def main():
             df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[1],t,m_wt,k,rho1,L,z)
             df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[2],t,m_wt,k,rho1,L,z)
             st.dataframe(df_result)
+            st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download3")
             graph_NeqSim(q,D,df_comp,t,p1,L)
     elif s1 == 'Liquid pressure drop/NPSHa':
         st.write('## Estimation of Equivalent Length') 
         st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
         st.write("""Note that Ls is the sum of XYZ coordinate length. \n For large size or high pressure piping, it is recommended to estimate the number of elbows tees and valves and evaluate the equivalent length, assuming piping layout.""")
         
-        def Darcy_equation_liq(Q,L,D,rho_liq,mu,type):
+        def Darcy_equation_liq(Q,L,D,rho_liq,mu):
             
                 Q = Q /3600
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
@@ -673,6 +679,7 @@ def main():
                 df_liq['Nelson (fannings Equation)'] = [p1,t,Q,rho_liq, mu,L,D,np.nan,np.nan,p2[1],dp[1],v[1],Re[1],f[1],e[1],np.nan]
                 df_liq.rename(columns={'input': 'Darcy Equation'}, inplace=True)
                 st.dataframe(df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],:])
+                st.download_button("Click to download your calculations table!", convert_data(df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],:].reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download4")
         else: 
             edited_df = st.experimental_data_editor(df_liq.iloc[:9,:])
             p1,t,Q,rho_liq, mu,L,D,H,Vp = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0],edited_df.iloc[7,0],edited_df.iloc[8,0]
@@ -690,6 +697,7 @@ def main():
                 df_liq['Darcy Equation'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[0],dp[0],v[0],Re[0],f[0],e[0],NPSHa[0]]
                 df_liq['Nelson (fannings Equation)'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[1],dp[1],v[1],Re[1],f[1],e[1],NPSHa[1]]
                 st.dataframe(df_liq)
+                st.download_button("Click to download your calculations table!", convert_data(df_liq.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download4")
     elif s1=='Check Standards for Line Sizing':
        
         from pandas.api.types import (is_categorical_dtype,is_datetime64_any_dtype,is_numeric_dtype,is_object_dtype,)
