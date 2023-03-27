@@ -48,7 +48,7 @@ def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z):
         Q_normal = Q_std*(273.15/(273.15+15))
         Q_actual = Q_std*(1.033023/p2)*((t+273.15)/tb)
         v = Q_actual/(A*3600) #Velocity (m/s)
-        sonic_velocity =((9.81*m_wt*847.9*(t+273.15))/k)**0.5
+        sonic_velocity =((9.81*k*847.9*(t+273.15))/m_wt)**0.5
         Re = 0.5134*(Pb/tb)*((G*Q_std*24)/(mu*0.01*D_mm))
         mach = v/sonic_velocity
         dp_percent = ((p1-p2)/p1)*100
