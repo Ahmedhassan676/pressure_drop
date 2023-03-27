@@ -1,4 +1,4 @@
-﻿Gas,Methane,Ethyne (Acetylene),Ethene (Ethylene),Ethane,Propene (Propylene),Propane,1-Butene (Butlyene),cis-2-Butene,trans-2-Butene,iso-Butane,n-Butane,iso-Pentane,n-Pentane,Benzene,n-Hexane,n-Heptane,Ammonia,Air,Water,Oxygen,Nitrogen,Hydrogen,H2s,Co,Co2
+﻿Gas,Methane,Ethyne (Acetylene),Ethene (Ethylene),Ethane,Propene (Propylene),Propane,1-Butene (Butlyene),cis-2-Butene,trans-2-Butene,i-Butane,n-Butane,i-Pentane,n-Pentane,Benzene,n-Hexane,n-Heptane,NH3,Air,Water,Oxygen,Nitrogen,Hydrogen,H2s,Co,Co2
 Mol wt ,16.043,26.038,28.054,30.07,42.081,44.097,56.108,56.108,56.108,58.123,58.123,72.15,72.15,78.114,86.177,100.204,17.0305,28.9625,18.0153,31.9988,28.0134,2.0159,34.08,28.01,44.01
 Pc,667,,731,706.6,676.6,615.5,586.4,615.4,574.9,527.9,550.9,490.4,488.8,710.4,436.9,396.8,1644,551.9,3200.1,731.4,492.5,190.7,1306.5,506.7,1070
 Tc,-116.66,,48.5,89.92,198.4,205.92,296.2,324.4,311.9,274.41,305.55,369,385.8,552.2,453.8,512.9,270.1,-220.97,705.1,-181.43,-232.53,-399.9,212.81,-220.63,87.76
