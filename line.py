@@ -10,16 +10,23 @@ from neqsim.process.processTools import *
 from neqsim import methods
 from neqsim.thermo import fluid, TPflash, createfluid2
 from neqsim.process import pipe, pipeline, clearProcess, stream, runProcess
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
-url ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
+
+url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
 df_gas = pd.read_csv(url, index_col=[0])
-url_1 = 'https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp.csv'
+url_1 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp.csv'
 df_comp_table = pd.read_csv(url_1)
-url_2 ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
+url_2 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
 df_summary = pd.read_csv(url_2, index_col=[0])
-url_3 ='https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
+url_3 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
 df_liq = pd.read_csv(url_3, index_col=[0])
 
+def find_nearest(D):
+    array = np.array([0.5,0.75,1,1.5,2,3,4,5,6,8,10,12,14,16,18,20,24])
+    idx = (np.abs(array - D)).argmin()
+    return array[idx]
 def k_calculations(df,df_comp_table,suc_t,disch_t):
         
         temperatures = np.array([suc_t,disch_t])*1.8+ 32 
@@ -46,7 +53,7 @@ def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z):
         mach = v/sonic_velocity
         dp_percent = ((p1-p2)/p1)*100
         rho_v_2 = rho2*(v**2)
-        summary_list = [p1,p2,t,L,D,Q_std,Q_normal,Q_actual,dp_percent,f_E,Re,v,sonic_velocity,mach,rho_v_2,m_wt,z,k]
+        summary_list = [p1,p2,t,L,D,Q_std,Q_normal,Q_actual,dp_percent,f_E,Re,v,sonic_velocity,mach,rho_v_2,m_wt,z,k,1/np.sqrt(k),mu]
         return summary_list
 def Z_calculations(df,t_suc,p_suc):
         pc = np.sum(df['mol%']*df['Pc']) * 0.01
@@ -74,8 +81,8 @@ def choose_composition():
             df = pd.DataFrame({'Composition/property':df_comp_table.columns[1:],'mol%':np.zeros(len(df_comp_table.columns)-1), 'm.wt':df_comp_table.iloc[0,1:],'Pc':df_comp_table.iloc[1,1:],'Tc':df_comp_table.iloc[2,1:]})
             try:
                 sum_of_comp = 0 
-                c1,c2,c3,c15,c4,c5,c6,c7,c8,c9,c16,c10,c11,c13,c14,nh3,h2o = 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-                options_list = [df_comp_table.columns[i] for i in [22,1,4,3,6,11,10,13,15,20,21,24,25,23,18,17,19]]
+                c1,c2,c3,c4,c5,c6,c7,c8,c9,c16,c10,c11,c13,h2o = 0,0,0,0,0,0,0,0,0,0,0,0,0,0
+                options_list = [df_comp_table.columns[i] for i in [22,1,4,6,11,10,13,15,20,21,24,25,23,19]]
                 while sum_of_comp != 100:
                     options = st.multiselect(
                     'Select your components', options_list
@@ -86,8 +93,8 @@ def choose_composition():
                         c2 = st.number_input('methane%', key = 'c2')
                     if df_comp_table.columns[4] in options:
                         c3 = st.number_input('ethane%', key = 'c3')
-                    if df_comp_table.columns[3] in options:
-                        c15 = st.number_input('ethylene%', key = 'c15')
+                   # if df_comp_table.columns[3] in options:
+                    #    c15 = st.number_input('ethylene%', key = 'c15')
                     if df_comp_table.columns[6] in options:
                         c4 = st.number_input('propane%', key = 'c4')
                     if df_comp_table.columns[11] in options:
@@ -108,15 +115,13 @@ def choose_composition():
                         c11 = st.number_input('carbon dioxide%', key = 'c11')
                     if df_comp_table.columns[23] in options:
                         c13 = st.number_input('hydrogen sulphide%', key = 'c13')
-                    if df_comp_table.columns[18] in options:
-                        c14 = st.number_input('air%', key = 'c14')
-                    if df_comp_table.columns[17] in options:
-                        nh3 = st.number_input('Ammonia%', key = 'nh3')
+                    #if df_comp_table.columns[17] in options:
+                     #   nh3 = st.number_input('Ammonia%', key = 'nh3')
                     if df_comp_table.columns[19] in options:
                         h2o = st.number_input('Water vapor%', key = 'h2o')
-                    if c1 or c2 or c3 or c15 or c4 or c5 or c6 or c7 or c8 or c9 or c16 or c10 or c11 or c13 or c14 or nh3 or h2o:
+                    if c1 or c2 or c3 or c4 or c5 or c6 or c7 or c8 or c9 or c16 or c10 or c11 or c13 or h2o:
                         c = []
-                        for i in (c1,c2,c3,c15,c4,c5,c6,c7,c8,c9,c16,c10,c11,c13,c14,nh3,h2o):
+                        for i in (c1,c2,c3,c4,c5,c6,c7,c8,c9,c16,c10,c11,c13,h2o):
                             c.append(i)
                         
                         for (i,j) in zip(options_list,c):
@@ -395,6 +400,7 @@ def general_gas_equation(q,p1,p2,D,G,z,L,t,mu,type):
         p2 = np.sqrt(-((((Q_std*24*(f**0.5))/((11.4946*(10**-4))*(tb/Pb)*((D)**2.5)))**2)*calc_port)+((p1*98.066)**2))/98.066
         result1,result2 = p2,f    
     return result1,result2
+
 def gas_equations(q,p1,p2,D,G,L,t,z,mu,type):
     
     t = t +273.15
@@ -449,7 +455,7 @@ def main():
     
         """
     st.markdown(html_temp, unsafe_allow_html=True)
-    s1 = st.selectbox('Chooose your line sizing?',('Gas - estimate Quantity (Std.m3/hr)','Gas - estimate Upstream pressure (kg/cm2.a)','Gas - estimate Downstream pressure (kg/cm2.a)','Liquid','Check Standards for Line Sizing'), key = 'type')
+    s1 = st.selectbox('Chooose your line sizing?',('Gas - estimate Quantity (Std.m3/hr)','Gas - estimate Upstream pressure (kg/cm2.a)','Gas - estimate Downstream pressure (kg/cm2.a)','Liquid pressure drop/NPSHa','Check Standards for Line Sizing'), key = 'type')
     if s1 == 'Gas - estimate Quantity (Std.m3/hr)':
         df_gas['input'] = 0.00
         edited_df = st.experimental_data_editor(df_gas)
@@ -459,7 +465,7 @@ def main():
         p1,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
         if sum(edited_df['input']) != 0:
             try:
-                D = fluids.nearest_pipe(NPS=D)[1]
+                D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
             Q_std = [0,0,0,0,0,0,0,0,0,0,0]
             try:
@@ -483,12 +489,12 @@ def main():
             Q_std[9] = NeqSim_calculations(Q_std[10],D,df_comp,t,p1,p2,L,'estimate quantity')
             df_result = pd.DataFrame(df_summary)
             df_result['General Gas'] = Summary_calculations(Q_std[10],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,0,p1,p2,t,m_wt,k,rho2,L,z)
+            df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,np.nan,p1,p2,t,m_wt,k,rho2,L,z)
             
             df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
             df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['Weyouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
-
+            df_result['Weymouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
+           
 
             st.dataframe(df_result)
             graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
@@ -504,7 +510,7 @@ def main():
         q,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
         if sum(edited_df['input']) != 0:
             try:
-                D = fluids.nearest_pipe(NPS=D)[1]
+                D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
             P1 = [0,0,0,0,0,0,0,0,0,0,0]
             try:
@@ -536,7 +542,7 @@ def main():
             
             df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,P1[0],p2,t,m_wt,k,rho2,L,z)
             df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,P1[1],p2,t,m_wt,k,rho2,L,z)
-            df_result['Weyouth'] = Summary_calculations(q,D,G,mu,0.95,P1[2],p2,t,m_wt,k,rho2,L,z)
+            df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,P1[2],p2,t,m_wt,k,rho2,L,z)
             st.dataframe(df_result)
             graph_NeqSim(q,D,df_comp,t,P1[3],L)
     elif s1 == "Gas - estimate Downstream pressure (kg/cm2.a)":
@@ -551,7 +557,7 @@ def main():
         q,p1,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
         if sum(edited_df['input']) != 0:
             try:
-                D = fluids.nearest_pipe(NPS=D)[1]
+                D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
             P2 = [0,0,0,0,0,0,0,0,0,0,0]
             try:
@@ -581,27 +587,59 @@ def main():
             
             df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[0],t,m_wt,k,rho1,L,z)
             df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[1],t,m_wt,k,rho1,L,z)
-            df_result['Weyouth'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[2],t,m_wt,k,rho1,L,z)
+            df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[2],t,m_wt,k,rho1,L,z)
             st.dataframe(df_result)
             graph_NeqSim(q,D,df_comp,t,p1,L)
-    elif s1 == 'Liquid':
-        def Darcy_equation(Q,L,D,rho_liq,mu):
+    elif s1 == 'Liquid pressure drop/NPSHa':
+        def Darcy_equation_liq(Q,L,D,rho_liq,mu,type):
+            
                 Q = Q /3600
-                D = fluids.nearest_pipe(NPS=D)[1]
+                D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
                 mu = mu*0.001
                 A = np.pi * (D**2) * 0.25
+                
                 v_liq = Q/A 
                 f=0.02
                 e = 0.00005
                 error = 10
-                while error > 0.0001:
-                    Re = (rho_liq*v_liq*D)/mu
-                    f1 = (1/(-2*np.log10((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2 
-                    error = abs(f - f1)
-                    f = f1
+                Re = (rho_liq*v_liq*D)/mu
+                if Re < 2040:
+                            f1 = 64/Re 
+                            error = 0
+                else:
+                    while error > 0.0001:
+                        f1 = (1/(-2*np.log10((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2 
+                        error = abs(f - f1)
+                        f = f1
                 dp = (f*L*rho_liq*(v_liq**2))/(D*2)*0.001*0.0101972
-        
+
                 return dp,v_liq,Re,f,e
+        def Nelson_equation(Q,L,D,rho_liq,mu):
+            Q = Q /3600
+            mu = mu
+            D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
+            A = np.pi * (D**2) * 0.25
+            
+            v_liq = (Q/A)
+            
+            Re = (rho_liq*v_liq*D)/(mu*0.001)
+            D = fluids.nearest_pipe(NPS=find_nearest(D))[0]
+            
+            L = L*3.28084
+            v_liq = (Q/A )*3.28084
+            S_gr = rho_liq/(16.01846336974*62.4)
+            if Re <2040:
+                 f = 988.58*(Re**(-1.428))
+            else : 
+                 f=0.2261*(Re**(-0.249))
+
+            e = np.nan
+            
+            dp = (0.323*f*(v_liq**2)*L*S_gr)/D
+
+            v_liq = v_liq/3.28084
+            dp =dp*0.070307
+            return dp,v_liq,Re,f,e
         df_liq['input'] = 0.00
         s2 = st.selectbox('Calculate NPSHa?',('No','Yes'), key = 'NPSHa')
         if s2 == 'No':
@@ -611,20 +649,34 @@ def main():
             
             
             if st.button("Reveal Calculations", key = 'calculations_tableLiq'):
-                dp,v,Re,f,e = Darcy_equation(Q,L,D,rho_liq,mu)
-                p2 = p1-dp
-                df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],0] = [p1,t,Q,rho_liq, mu,L,D,p2,dp,v,Re,f,e]
-                st.dataframe(df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],0])
+                Nelson_equation(Q,L,D,rho_liq,mu)
+                dp,v,Re,f,e = [0,0],[0,0],[0,0],[0,0],[0,0]
+                p2 = [0,0]
+                dp[0],v[0],Re[0],f[0],e[0]=Darcy_equation_liq(Q,L,D,rho_liq,mu)
+                p2[0]= p1-dp[0]
+                dp[1],v[1],Re[1],f[1],e[1]=Nelson_equation(Q,L,D,rho_liq,mu)
+                p2[1]= p1-dp[1]
+                df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],0] = [p1,t,Q,rho_liq, mu,L,D,p2[0],dp[0],v[0],Re[0],f[0],e[0]]
+                df_liq['Nelson (fannings Equation)'] = [p1,t,Q,rho_liq, mu,L,D,np.nan,np.nan,p2[1],dp[1],v[1],Re[1],f[1],e[1],np.nan]
+                df_liq.rename(columns={'input': 'Darcy Equation'}, inplace=True)
+                st.dataframe(df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],:])
         else: 
             edited_df = st.experimental_data_editor(df_liq.iloc[:9,:])
             p1,t,Q,rho_liq, mu,L,D,H,Vp = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0],edited_df.iloc[7,0],edited_df.iloc[8,0]
             
             if st.button("Reveal Calculations", key = 'calculations_tableLiq'):
-                dp,v,Re,f,e = Darcy_equation(Q,L,D,rho_liq,mu)
-                p2 = p1-dp
-                NPSHa = (p2 - Vp - 1.03323)*10/(rho_liq*0.001)+H
-                df_liq['input'] = [p1,t,Q,rho_liq, mu,L,D,H, Vp ,p2,dp,v,Re,f,e,NPSHa]
-                st.dataframe(df_liq) 
+                dp,v,Re,f,e,NPSHa = [0,0],[0,0],[0,0],[0,0],[0,0],[0,0]
+                p2 = [0,0]
+                dp[0],v[0],Re[0],f[0],e[0]=Darcy_equation_liq(Q,L,D,rho_liq,mu)
+                p2[0]= p1-dp[0]
+                NPSHa[0] = (p2[0] - Vp - 1.03323)*10/(rho_liq*0.001)+H
+                dp[1],v[1],Re[1],f[1],e[1]=Nelson_equation(Q,L,D,rho_liq,mu)
+                p2[1]= p1-dp[1]
+                NPSHa[1] = (p2[1] - Vp - 1.03323)*10/(rho_liq*0.001)+H
+                df_liq.rename(columns={'input': 'Darcy Equation'}, inplace=True)
+                df_liq['Darcy Equation'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[0],dp[0],v[0],Re[0],f[0],e[0],NPSHa[0]]
+                df_liq['Nelson (fannings Equation)'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[1],dp[1],v[1],Re[1],f[1],e[1],NPSHa[1]]
+                st.dataframe(df_liq)
     elif s1=='Check Standards for Line Sizing':
        
         from pandas.api.types import (is_categorical_dtype,is_datetime64_any_dtype,is_numeric_dtype,is_object_dtype,)
@@ -705,7 +757,7 @@ def main():
                             df = df[df[column].astype(str).str.contains(user_text_input)]
 
             return df
-        df = pd.read_csv('https://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/criteria.csv', index_col=[0])
+        df = pd.read_csv('http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/criteria.csv', index_col=[0])
         st.dataframe(filter_dataframe(df))
         st.write('Based On an Excel sheet Compiled by: Ajay S. Satpute')
 if __name__ == '__main__':
