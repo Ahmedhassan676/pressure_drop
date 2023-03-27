@@ -10,8 +10,8 @@ from neqsim.process.processTools import *
 from neqsim import methods
 from neqsim.thermo import fluid, TPflash, createfluid2
 from neqsim.process import pipe, pipeline, clearProcess, stream, runProcess
-#import ssl
-#ssl._create_default_https_context = ssl._create_unverified_context
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
 
 
 url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
@@ -457,10 +457,12 @@ def main():
     st.markdown(html_temp, unsafe_allow_html=True)
     s1 = st.selectbox('Chooose your line sizing?',('Gas - estimate Quantity (Std.m3/hr)','Gas - estimate Upstream pressure (kg/cm2.a)','Gas - estimate Downstream pressure (kg/cm2.a)','Liquid pressure drop/NPSHa','Check Standards for Line Sizing'), key = 'type')
     if s1 == 'Gas - estimate Quantity (Std.m3/hr)':
+        st.write('## Estimation of Equivalent Length') 
+        st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
+        st.write("""Note that Ls is the sum of XYZ coordinate length. \n For large size or high pressure piping, it is recommended to estimate the number of elbows tees and valves and evaluate the equivalent length, assuming piping layout.""")
+        
         df_gas['input'] = 0.00
         edited_df = st.experimental_data_editor(df_gas)
-        
-        
         q=0
         p1,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
         if sum(edited_df['input']) != 0:
@@ -500,6 +502,10 @@ def main():
             graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
             
     elif s1 == "Gas - estimate Upstream pressure (kg/cm2.a)":
+        st.write('## Estimation of Equivalent Length') 
+        st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
+        st.write("""Note that Ls is the sum of XYZ coordinate length. \n For large size or high pressure piping, it is recommended to estimate the number of elbows tees and valves and evaluate the equivalent length, assuming piping layout.""")
+        
         df_gas_modified = df_gas.copy()
         df_gas_modified['input'] = 0.00
         df_gas_modified.rename(index={'P1 (Kg/cm2)': 'Flow Rate (Std.m3/hr)'}, inplace=True)
@@ -546,6 +552,9 @@ def main():
             st.dataframe(df_result)
             graph_NeqSim(q,D,df_comp,t,P1[3],L)
     elif s1 == "Gas - estimate Downstream pressure (kg/cm2.a)":
+        st.write('## Estimation of Equivalent Length') 
+        st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
+        st.write("""Note that Ls is the sum of XYZ coordinate length. \n For large size or high pressure piping, it is recommended to estimate the number of elbows tees and valves and evaluate the equivalent length, assuming piping layout.""")
         
         df_gas_modified = df_gas.copy()
         df_gas_modified['input'] = 0.00
@@ -591,6 +600,10 @@ def main():
             st.dataframe(df_result)
             graph_NeqSim(q,D,df_comp,t,p1,L)
     elif s1 == 'Liquid pressure drop/NPSHa':
+        st.write('## Estimation of Equivalent Length') 
+        st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
+        st.write("""Note that Ls is the sum of XYZ coordinate length. \n For large size or high pressure piping, it is recommended to estimate the number of elbows tees and valves and evaluate the equivalent length, assuming piping layout.""")
+        
         def Darcy_equation_liq(Q,L,D,rho_liq,mu,type):
             
                 Q = Q /3600
