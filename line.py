@@ -689,10 +689,10 @@ def main():
                 p2 = [0,0]
                 dp[0],v[0],Re[0],f[0],e[0]=Darcy_equation_liq(Q,L,D,rho_liq,mu)
                 p2[0]= p1-dp[0]
-                NPSHa[0] = (p2[0] - Vp - 1.03323)*10/(rho_liq*0.001)+H
+                NPSHa[0] = (p2[0] - Vp + 1.03323)*10/(rho_liq*0.001)+H
                 dp[1],v[1],Re[1],f[1],e[1]=Nelson_equation(Q,L,D,rho_liq,mu)
                 p2[1]= p1-dp[1]
-                NPSHa[1] = (p2[1] - Vp - 1.03323)*10/(rho_liq*0.001)+H
+                NPSHa[1] = (p2[1] - Vp + 1.03323)*10/(rho_liq*0.001)+H
                 df_liq.rename(columns={'input': 'Darcy Equation'}, inplace=True)
                 df_liq['Darcy Equation'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[0],dp[0],v[0],Re[0],f[0],e[0],NPSHa[0]]
                 df_liq['Nelson (fannings Equation)'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[1],dp[1],v[1],Re[1],f[1],e[1],NPSHa[1]]
@@ -701,6 +701,7 @@ def main():
     elif s1 == 'Estimate Equivalent Length':
             url4 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/equ_length.csv'
             df_Le = pd.read_csv(url4, index_col=[0])
+            Length = st.number_input('Insert pipe straight length (m)', key = 'pipe')
             if "df" not in st.session_state:
                 st.session_state.df = pd.DataFrame(columns=[0,1,2])
             
@@ -724,9 +725,9 @@ def main():
                     rw = st.session_state.df.shape[0] 
                     st.session_state.df.loc[rw] = fittings_list[0]
             df_fitting = pd.DataFrame(st.session_state.df).rename(columns={0:'D', 1:'fitting', 2:'Le (ft)'})
-            
-            st.dataframe(df_fitting)
-            st.write('Sum of All fittings = {} m'.format(round(df_fitting['Le (ft)'].sum()*0.3048,2)))
+            df_fitting['Le (m)'] = df_fitting['Le (ft)']*0.3048
+            st.dataframe(df_fitting.loc[:,['D','fitting','Le (m)']])
+            st.write('Sum of All fittings Length = {} m and Equivalent Length is {} m'.format(round(df_fitting['Le (ft)'].sum()*0.3048,2),round(df_fitting['Le (ft)'].sum()*0.3048,2)+Length))
     elif s1=='Check Standards for Line Sizing':
        
         from pandas.api.types import (is_categorical_dtype,is_datetime64_any_dtype,is_numeric_dtype,is_object_dtype,)
@@ -787,24 +788,12 @@ def main():
                             step=step,
                         )
                         df = df[df[column].between(*user_num_input)]
-                    elif is_datetime64_any_dtype(df[column]):
-                        user_date_input = right.date_input(
-                            f"Values for {column}",
-                            value=(
-                                df[column].min(),
-                                df[column].max(),
-                            ),
-                        )
-                        if len(user_date_input) == 2:
-                            user_date_input = tuple(map(pd.to_datetime, user_date_input))
-                            start_date, end_date = user_date_input
-                            df = df.loc[df[column].between(start_date, end_date)]
                     else:
                         user_text_input = right.text_input(
                             f"Search in {column}",
                         )
                         if user_text_input:
-                            df = df[df[column].astype(str).str.contains(user_text_input)]
+                            df = df[df[column].astype(str).str.contains(user_text_input.lower())]
 
             return df
         df = pd.read_csv('http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/criteria.csv', index_col=[0])
