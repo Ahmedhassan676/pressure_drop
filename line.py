@@ -458,7 +458,7 @@ def main():
     
         """
     st.markdown(html_temp, unsafe_allow_html=True)
-    s1 = st.selectbox('Chooose your line sizing?',('Gas - estimate Quantity (Std.m3/hr)','Gas - estimate Upstream pressure (kg/cm2.a)','Gas - estimate Downstream pressure (kg/cm2.a)','Liquid pressure drop/NPSHa','Check Standards for Line Sizing'), key = 'type')
+    s1 = st.selectbox('Chooose your line sizing?',('Gas - estimate Quantity (Std.m3/hr)','Gas - estimate Upstream pressure (kg/cm2.a)','Gas - estimate Downstream pressure (kg/cm2.a)','Liquid pressure drop/NPSHa','Estimate Equivalent Length','Check Standards for Line Sizing'), key = 'type')
     if s1 == 'Gas - estimate Quantity (Std.m3/hr)':
         st.write('## Estimation of Equivalent Length') 
         st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
@@ -689,15 +689,44 @@ def main():
                 p2 = [0,0]
                 dp[0],v[0],Re[0],f[0],e[0]=Darcy_equation_liq(Q,L,D,rho_liq,mu)
                 p2[0]= p1-dp[0]
-                NPSHa[0] = (p2[0] - Vp + 1.03323)*10/(rho_liq*0.001)+H
+                NPSHa[0] = (p2[0] - Vp - 1.03323)*10/(rho_liq*0.001)+H
                 dp[1],v[1],Re[1],f[1],e[1]=Nelson_equation(Q,L,D,rho_liq,mu)
                 p2[1]= p1-dp[1]
-                NPSHa[1] = (p2[1] - Vp + 1.03323)*10/(rho_liq*0.001)+H
+                NPSHa[1] = (p2[1] - Vp - 1.03323)*10/(rho_liq*0.001)+H
                 df_liq.rename(columns={'input': 'Darcy Equation'}, inplace=True)
                 df_liq['Darcy Equation'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[0],dp[0],v[0],Re[0],f[0],e[0],NPSHa[0]]
                 df_liq['Nelson (fannings Equation)'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[1],dp[1],v[1],Re[1],f[1],e[1],NPSHa[1]]
                 st.dataframe(df_liq)
                 st.download_button("Click to download your calculations table!", convert_data(df_liq.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download4")
+    elif s1 == 'Estimate Equivalent Length':
+            url4 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/equ_length.csv'
+            df_Le = pd.read_csv(url4, index_col=[0])
+            if "df" not in st.session_state:
+                st.session_state.df = pd.DataFrame(columns=[0,1,2])
+            
+            rw = -1
+            fittings_list=[]
+            with st.form("my_form"):
+            
+               
+                
+                
+                selected_columns = st.selectbox('Select fitting', options=df_Le.columns)
+                selected_indices = st.selectbox('Select diameter/d', options=df_Le.index)
+                fittings_list.append([selected_indices,selected_columns,df_Le.loc[selected_indices,selected_columns]])
+                
+                
+                
+                # create an "Add" button to add selected indices to the list
+                add_button = st.form_submit_button('Add')
+                if add_button:
+                    
+                    rw = st.session_state.df.shape[0] 
+                    st.session_state.df.loc[rw] = fittings_list[0]
+            df_fitting = pd.DataFrame(st.session_state.df).rename(columns={0:'D', 1:'fitting', 2:'Le (ft)'})
+            
+            st.dataframe(df_fitting)
+            st.write('Sum of All fittings = {} m'.format(round(df_fitting['Le (ft)'].sum()*0.3048,2)))
     elif s1=='Check Standards for Line Sizing':
        
         from pandas.api.types import (is_categorical_dtype,is_datetime64_any_dtype,is_numeric_dtype,is_object_dtype,)
