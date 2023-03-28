@@ -689,10 +689,10 @@ def main():
                 p2 = [0,0]
                 dp[0],v[0],Re[0],f[0],e[0]=Darcy_equation_liq(Q,L,D,rho_liq,mu)
                 p2[0]= p1-dp[0]
-                NPSHa[0] = (p2[0] - Vp - 1.03323)*10/(rho_liq*0.001)+H
+                NPSHa[0] = (p2[0] - Vp + 1.03323)*10/(rho_liq*0.001)+H
                 dp[1],v[1],Re[1],f[1],e[1]=Nelson_equation(Q,L,D,rho_liq,mu)
                 p2[1]= p1-dp[1]
-                NPSHa[1] = (p2[1] - Vp - 1.03323)*10/(rho_liq*0.001)+H
+                NPSHa[1] = (p2[1] - Vp + 1.03323)*10/(rho_liq*0.001)+H
                 df_liq.rename(columns={'input': 'Darcy Equation'}, inplace=True)
                 df_liq['Darcy Equation'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[0],dp[0],v[0],Re[0],f[0],e[0],NPSHa[0]]
                 df_liq['Nelson (fannings Equation)'] = [p1,t,Q,rho_liq, mu,L,D,H,Vp,p2[1],dp[1],v[1],Re[1],f[1],e[1],NPSHa[1]]
