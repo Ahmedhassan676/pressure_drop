@@ -137,5 +137,5 @@
 136,single phase,condensate,no/na,na,Steam condensate: Upstream of steam trap or control valve,NA,NA,NA,NA,0.05 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
 137,single phase,condensate,no/na,na,"Steam condensate: Downstream
 of steam trap or control valve",NA,NA,25 m/s (practical),NA,0.2 - 0.7 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
-137,single phase,liquid,no/na,na,Cooling water,NA,NA,1 - 4 m/s (practical),,0.3 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
-137,single phase,liquid,no/na,na,Sea water,NA,NA,1 - 4 m/s (practical),,NA,NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
+138,single phase,liquid,no/na,na,Cooling water,NA,NA,1 - 4 m/s (practical),,0.3 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
+139,single phase,liquid,no/na,na,Sea water,NA,NA,1 - 4 m/s (practical),,NA,NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
