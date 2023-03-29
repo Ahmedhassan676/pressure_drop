@@ -648,9 +648,9 @@ def main():
             v_liq = (Q/A )*3.28084
             S_gr = rho_liq/(16.01846336974*62.4)
             if Re <2040:
-                 f = 988.58*(Re**(-1.428))
+                 f = 15.017*(Re**(-0.995))
             else : 
-                 f=0.2261*(Re**(-0.249))
+                 f=0.048*(Re**(-0.183))
 
             e = np.nan
             
@@ -703,7 +703,7 @@ def main():
             df_Le = pd.read_csv(url4, index_col=[0])
             Length = st.number_input('Insert pipe straight length (m)', key = 'pipe')
             if "df" not in st.session_state:
-                st.session_state.df = pd.DataFrame(columns=[0,1,2])
+                st.session_state.df = pd.DataFrame(columns=[0,1,2,3])
             
             rw = -1
             fittings_list=[]
@@ -714,7 +714,8 @@ def main():
                 
                 selected_columns = st.selectbox('Select fitting', options=df_Le.columns)
                 selected_indices = st.selectbox('Select diameter/d', options=df_Le.index)
-                fittings_list.append([selected_indices,selected_columns,df_Le.loc[selected_indices,selected_columns]])
+                count = st.slider('Count of fiiting', 1, 10, 1)
+                fittings_list.append([selected_indices,selected_columns,df_Le.loc[selected_indices,selected_columns],count])
                 
                 
                 
@@ -724,10 +725,13 @@ def main():
                     
                     rw = st.session_state.df.shape[0] 
                     st.session_state.df.loc[rw] = fittings_list[0]
-            df_fitting = pd.DataFrame(st.session_state.df).rename(columns={0:'D', 1:'fitting', 2:'Le (ft)'})
+            df_fitting = pd.DataFrame(st.session_state.df).rename(columns={0:'D', 1:'fitting', 2:'Le (ft)', 3: 'count'})
             df_fitting['Le (m)'] = df_fitting['Le (ft)']*0.3048
-            st.dataframe(df_fitting.loc[:,['D','fitting','Le (m)']])
-            st.write('Sum of All fittings Length = {} m and Equivalent Length is {} m'.format(round(df_fitting['Le (ft)'].sum()*0.3048,2),round(df_fitting['Le (ft)'].sum()*0.3048,2)+Length))
+            st.dataframe(df_fitting.loc[:,['D','fitting','Le (m)','count']])
+            
+            st.write('Sum of All fittings Length = {} m and Equivalent Length is {} m'.format(round(sum(df_fitting['Le (m)']*df_fitting['count']),2),round(sum(df_fitting['Le (m)']*df_fitting['count']),2)+Length))
+            
+           
     elif s1=='Check Standards for Line Sizing':
        
         from pandas.api.types import (is_categorical_dtype,is_datetime64_any_dtype,is_numeric_dtype,is_object_dtype,)
