@@ -636,13 +636,13 @@ def main():
         def Nelson_equation(Q,L,D,rho_liq,mu):
             Q = Q /3600
             mu = mu
-            D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
-            A = np.pi * (D**2) * 0.25
+            D1 = fluids.nearest_pipe(NPS=find_nearest(D))[1]
+            A = np.pi * (D1**2) * 0.25
             
             v_liq = (Q/A)
             
-            Re = (rho_liq*v_liq*D)/(mu*0.001)
-            D = fluids.nearest_pipe(NPS=find_nearest(D))[0]
+            Re = (rho_liq*v_liq*D1)/(mu*0.001)
+            D2 = fluids.nearest_pipe(NPS=find_nearest(D))[0]
             
             L = L*3.28084
             v_liq = (Q/A )*3.28084
@@ -654,7 +654,7 @@ def main():
 
             e = np.nan
             
-            dp = (0.323*f*(v_liq**2)*L*S_gr)/D
+            dp = (0.323*f*(v_liq**2)*L*S_gr)/D2
 
             v_liq = v_liq/3.28084
             dp =dp*0.070307
