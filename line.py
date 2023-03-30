@@ -504,7 +504,7 @@ def main():
             else:
                     try:
                             df_comp = choose_composition()
-                            if df_comp['mol%].sum() == 100:
+                            if df_comp['mol%'].sum() == 100:
                                     z1, m_wt = Z_calculations(df_comp,t,p1)
                                     z2, m_wt = Z_calculations(df_comp,t,p2)
                                     G = m_wt/29
