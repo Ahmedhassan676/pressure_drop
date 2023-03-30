@@ -78,7 +78,7 @@ def Z_calculations(df,t_suc,p_suc):
             error = abs(Z-(1/y))
             y = 1/Z 
         
-        return Z, m_wt,Pr,Tr
+        return Z, m_wt
 def choose_composition():
             
             df = pd.DataFrame({'Composition/property':df_comp_table.columns[1:],'mol%':np.zeros(len(df_comp_table.columns)-1), 'm.wt':df_comp_table.iloc[0,1:],'Pc':df_comp_table.iloc[1,1:],'Tc':df_comp_table.iloc[2,1:]})
@@ -493,19 +493,28 @@ def main():
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
             Q_std = [0,0,0,0,0,0,0,0,0,0,0]
-            try:
-                    df_comp = choose_composition()
-                    
-                    z1, m_wt,Pr1,Tr1 = Z_calculations(df_comp,t,p1)
-                    z2, m_wt,Pr2,Tr2 = Z_calculations(df_comp,t,p2)
+            s_select = st.selectbox('Estimate M.wt, Cp/Cv and Z, Density and Viscosity?',('Yes','I already have these values'), key = 'k_calculations')
+            if s_select == 'I already have these values':
+                    m_wt= st.number_input('Molecular weight' , key = 'mwt')
+                    z= st.number_input('Compressibility factor', key = 'z')
+                    k= st.number_input('Cp/Cv', key = 'k')
+                    rho2= st.number_input('Density (kg/m3)', key = 'rho')
+                    mu= st.number_input('Viscosity (Cp)', key = 'vis')
                     G = m_wt/29
-                    z = (z1+z2)*0.5
-                    mu,rho1 = get_viscosity(df_comp,p1,t)
-                    mu,rho2 = get_viscosity(df_comp,p2,t)
-                    k = k_calculations(df_comp,df_comp_table,t,t)
-                    
-            except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
-            except UnboundLocalError: pass
+            else:
+                    try:
+                            df_comp = choose_composition()
+                            
+                            z1, m_wt = Z_calculations(df_comp,t,p1)
+                            z2, m_wt = Z_calculations(df_comp,t,p2)
+                            G = m_wt/29
+                            z = (z1+z2)*0.5
+                            mu,rho1 = get_viscosity(df_comp,p1,t)
+                            mu,rho2 = get_viscosity(df_comp,p2,t)
+                            k = k_calculations(df_comp,df_comp_table,t,t)
+                            
+                    except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+                    except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table22'):
             try:
@@ -515,11 +524,14 @@ def main():
                     dp_100m = ((p1 - p2)*100)/L
                     Q_std[:3] = gas_equations(q,p1,p2,D,G,L,t,z,mu,'estimate quantity')
                     Q_std[10],f = general_gas_equation(Q_std[0],p1,p2,D,G,z,L,t,mu,'estimate quantity')
-                    
-                    Q_std[9] = NeqSim_calculations(Q_std[10],D,df_comp,t,p1,p2,L,'estimate quantity')
                     df_result = pd.DataFrame(df_summary)
+                    if s_select != 'I already have these values':
+                        Q_std[9] = NeqSim_calculations(Q_std[10],D,df_comp,t,p1,p2,L,'estimate quantity')
+                        df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,np.nan,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                    else: del df_result['NeqSim Simulator'] 
+                    
                     df_result['General Gas'] = Summary_calculations(Q_std[10],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
-                    df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,np.nan,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                    
                     
                     df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
                     df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
@@ -528,7 +540,8 @@ def main():
 
                     st.dataframe(df_result)
                     st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download1")
-                    graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
+                    if s_select != 'I already have these values':
+                        graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
             except UnboundLocalError: st.write('Check your data input!')
             except jpype.JException: 
                 dp_100m = ((p1 - p2)*100)/L
@@ -566,40 +579,52 @@ def main():
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
             P1 = [0,0,0,0,0,0,0,0,0,0,0]
-            try:
-                    df_comp = choose_composition()
-                    
-                    #z1, m_wt,Pr1,Tr1 = Z_calculations(df_comp,t,p1)
-                    z2, m_wt,Pr2,Tr2 = Z_calculations(df_comp,t,p2)
-                    z = z2
+            s_select = st.selectbox('Estimate M.wt, Cp/Cv and Z, Density and Viscosity?',('Yes','I already have these values'), key = 'k_calculations')
+            if s_select == 'I already have these values':
+                    m_wt= st.number_input('Molecular weight' , key = 'mwt')
+                    z= st.number_input('Compressibility factor', key = 'z')
+                    k= st.number_input('Cp/Cv', key = 'k')
+                    rho2= st.number_input('Density (kg/m3)', key = 'rho')
+                    mu= st.number_input('Viscosity (Cp)', key = 'vis')
                     G = m_wt/29
-                    #mu,rho1 = get_viscosity(df_comp,p1,t)
-                    mu,rho2 = get_viscosity(df_comp,p2,t)
-                    
-                    k = k_calculations(df_comp,df_comp_table,t,t)
-                
-                
-                
-            except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
-            except UnboundLocalError: pass
+            else:
+                    try:
+                            df_comp = choose_composition()
+                            z2, m_wt = Z_calculations(df_comp,t,p2)
+                            z = z2
+                            G = m_wt/29
+                            mu,rho2 = get_viscosity(df_comp,p2,t)
+                            k = k_calculations(df_comp,df_comp_table,t,t)
+                        
+                        
+                        
+                    except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+                    except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table_P1'):
             try:
                 P1[:3] = gas_equations(q,None,p2,D,G,L,t,z,mu,"estimate upstream pressure")
                 P1[4],f = general_gas_equation(q,None,p2,D,G,z,L,t,mu,"estimate upstream pressure")
-                
-                P1[3] = NeqSim_calculations(q,D,df_comp,t,P1[0],p2,L,"estimate upstream pressure")
-                dp_100m = ((np.array(P1) -p2)*100)/L
                 df_result = pd.DataFrame(df_summary)
+                if s_select != 'I already have these values':
+                    P1[3] = NeqSim_calculations(q,D,df_comp,t,P1[0],p2,L,"estimate upstream pressure")
+                    dp_100m = ((np.array(P1) -p2)*100)/L
+                    df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,P1[3],p2,t,m_wt,k,rho2,L,z,dp_100m[3])
+                else: 
+                     dp_100m = ((np.array(P1) -p2)*100)/L
+                     del df_result['NeqSim Simulator']
+                
+                
                 df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,P1[4],p2,t,m_wt,k,rho2,L,z,dp_100m[4])
-                df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,P1[3],p2,t,m_wt,k,rho2,L,z,dp_100m[3])
+                
                 
                 df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,P1[0],p2,t,m_wt,k,rho2,L,z,dp_100m[0])
                 df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,P1[1],p2,t,m_wt,k,rho2,L,z,dp_100m[1])
                 df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,P1[2],p2,t,m_wt,k,rho2,L,z,dp_100m[2])
                 st.dataframe(df_result)
                 st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download2")
-                graph_NeqSim(q,D,df_comp,t,P1[3],L)
+                if s_select != 'I already have these values':
+                        graph_NeqSim(q,D,df_comp,t,P1[3],L)
             except UnboundLocalError: st.write('Check your data input!')
             except jpype.JException: 
                 P1[:3] = gas_equations(q,None,p2,D,G,L,t,z,mu,"estimate upstream pressure")
@@ -636,38 +661,52 @@ def main():
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
             P2 = [0,0,0,0,0,0,0,0,0,0,0]
-            try:
-                    df_comp = choose_composition()
-                    
-                    z1, m_wt,Pr1,Tr1 = Z_calculations(df_comp,t,p1)
-                    
-                    z = z1
+            s_select = st.selectbox('Estimate M.wt, Cp/Cv and Z, Density and Viscosity?',('Yes','I already have these values'), key = 'k_calculations')
+            if s_select == 'I already have these values':
+                    m_wt= st.number_input('Molecular weight' , key = 'mwt')
+                    z= st.number_input('Compressibility factor', key = 'z')
+                    k= st.number_input('Cp/Cv', key = 'k')
+                    rho1= st.number_input('Density (kg/m3)', key = 'rho')
+                    mu= st.number_input('Viscosity (Cp)', key = 'vis')
                     G = m_wt/29
-                    mu,rho1 = get_viscosity(df_comp,p1,t)
-                    k = k_calculations(df_comp,df_comp_table,t,t)
-                    
-                    
-                    
-            except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
-            except UnboundLocalError: pass
+            else:
+                    try:
+                            df_comp = choose_composition()
+                            
+                            z1, m_wt = Z_calculations(df_comp,t,p1)
+                            
+                            z = z1
+                            G = m_wt/29
+                            mu,rho1 = get_viscosity(df_comp,p1,t)
+                            k = k_calculations(df_comp,df_comp_table,t,t)
+                            
+                            
+                            
+                    except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+                    except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table_P2'):
             try:
                 P2[:3] = gas_equations(q,p1,None,D,G,L,t,z,mu,"estimate downstream pressure")
                 P2[4],f = general_gas_equation(q,p1,None,D,G,z,L,t,mu,"estimate downstream pressure")
-                
-                P2[3] = NeqSim_calculations(q,D,df_comp,t,p1,P2[0],L,"estimate downstream pressure")
-                dp_100m = ((p1 - np.array(P2) )*100)/L
                 df_result = pd.DataFrame(df_summary)
+                if s_select != 'I already have these values':
+                    P2[3] = NeqSim_calculations(q,D,df_comp,t,p1,P2[0],L,"estimate downstream pressure")
+                    dp_100m = ((p1 - np.array(P2) )*100)/L
+                    df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,p1,P2[3],t,m_wt,k,rho1,L,z,dp_100m[3])
+                else: 
+                     del df_result['NeqSim Simulator']
+                     dp_100m = ((p1 - np.array(P2) )*100)/L
                 df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,p1,P2[4],t,m_wt,k,rho1,L,z,dp_100m[4])
-                df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,p1,P2[3],t,m_wt,k,rho1,L,z,dp_100m[3])
+                
                 
                 df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[0],t,m_wt,k,rho1,L,z,dp_100m[0])
                 df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[1],t,m_wt,k,rho1,L,z,dp_100m[1])
                 df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[2],t,m_wt,k,rho1,L,z,dp_100m[2])
                 st.dataframe(df_result)
                 st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download3")
-                graph_NeqSim(q,D,df_comp,t,p1,L)
+                if s_select != 'I already have these values':
+                    graph_NeqSim(q,D,df_comp,t,p1,L)
             except UnboundLocalError: st.write('Check your data input!')
             except ValueError: st.warning('Check your assumptions: Empirical equations couldnt find a valid solution')
             except jpype.JException: 
