@@ -488,7 +488,7 @@ def main():
         edited_df = st.experimental_data_editor(df_gas)
         q=0
         p1,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
-        if edited_df.sum() != 0:
+        if edited_df['input'].sum() != 0:
             try:
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
