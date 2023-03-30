@@ -43,7 +43,7 @@ def k_calculations(df,df_comp_table,suc_t,disch_t):
 
         
         return k
-def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z):
+def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z,dp_100m):
         tb = 273.15+15.55556
         Pb = 101.325
         D_mm = D * 1000
@@ -56,7 +56,7 @@ def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z):
         mach = v/sonic_velocity
         dp_percent = ((p1-p2)/p1)*100
         rho_v_2 = rho2*(v**2)
-        summary_list = [p1,p2,t,L,D,Q_std,Q_normal,Q_actual,dp_percent,f_E,Re,v,sonic_velocity,mach,rho_v_2,m_wt,z,k,1/np.sqrt(k),mu]
+        summary_list = [p1,p2,t,L,D,Q_std,Q_normal,Q_actual,dp_percent,dp_100m,f_E,Re,v,sonic_velocity,mach,rho_v_2,m_wt,z,k,1/np.sqrt(k),mu]
         return summary_list
 def Z_calculations(df,t_suc,p_suc):
         pc = np.sum(df['mol%']*df['Pc']) * 0.01
@@ -271,6 +271,7 @@ def graph_NeqSim(q,D,df_comp,t,p1,L):
             p2 = []
             p2.append(p1)
             L_list = []
+            L_list.append(0)
             velocity = []
             velocity.append(Calculate_OutVelocity(D,q,p1,t))
             p1 = p1*98.066*0.01
@@ -297,30 +298,49 @@ def graph_NeqSim(q,D,df_comp,t,p1,L):
             method = "friction theory"
             fluid1.getPhase('gas').getPhysicalProperties().setViscosityModel(method)
             fluid1.initProperties()
-            for i in range(10):
-                fluid1.setPressure(p1, "bara") 
-                clearProcess()
-                
-                stream1 = stream(fluid1)
-                
-                pipeSimple = pipe(stream1, pipeLength, deltaElevation, diameter, roughness)
-                runProcess()
-                
-                p2.append(pipeSimple.getOutStream().getFluid().getPressure('bara')/0.9806)
-                velocity.append(Calculate_OutVelocity(D,q*1000000/24,p2[i+1],t))
-                L_list.append(0.1*i*L)
-                p1 = pipeSimple.getOutStream().getFluid().getPressure('bara')
-            L_list.append(L)
+            if 'hydrogen' in names:
+                 for i in range(2):
+                    pipeLength = L*0.5
+                    fluid1.setPressure(p1, "bara") 
+                    clearProcess()
+                    
+                    stream1 = stream(fluid1)
+                    
+                    pipeSimple = pipe(stream1, pipeLength, deltaElevation, diameter, roughness)
+                    runProcess()
+                    if p2[-1] != pipeSimple.getOutStream().getFluid().getPressure('bara')/0.9806:
+                        p2.append(pipeSimple.getOutStream().getFluid().getPressure('bara')/0.9806)
+                        velocity.append(Calculate_OutVelocity(D,q*1000000/24,p2[-1],t))
+                        L_list.append((1/3)*len(p2)*L)
+                        p1 = pipeSimple.getOutStream().getFluid().getPressure('bara')
+            else:
+                for i in range(9):
+                    fluid1.setPressure(p1, "bara") 
+                    clearProcess()
+                    
+                    stream1 = stream(fluid1)
+                    
+                    pipeSimple = pipe(stream1, pipeLength, deltaElevation, diameter, roughness)
+                    runProcess()
+                    if p2[-1] != pipeSimple.getOutStream().getFluid().getPressure('bara')/0.9806:
+                        p2.append(pipeSimple.getOutStream().getFluid().getPressure('bara')/0.9806)
+                        velocity.append(Calculate_OutVelocity(D,q*1000000/24,p2[-1],t))
+                        L_list.append(0.1*len(p2)*L)
+                        p1 = pipeSimple.getOutStream().getFluid().getPressure('bara')
+            if L_list[-1] != L:
+                 st.warning('Check your dp percent or volume flow rate input as Neqsim couldnt fully converge')
+                      
+            
             fig,axs = plt.subplots(1,2)
             fig.set_figheight(4)
             fig.set_figwidth(12)
             axs[0].plot(L_list,p2)
-            
+            axs[0].grid()
             axs[0].set_xlabel("Length (m)")
             axs[0].set_ylabel("Pressure (kg/cm2.a)")
 
             axs[1].plot(L_list,velocity)
-            
+            axs[1].grid()
             axs[1].set_xlabel("Length (m)")
             axs[1].set_ylabel("Velocity (m/s)")
             st.pyplot(fig)   
@@ -468,7 +488,7 @@ def main():
         edited_df = st.experimental_data_editor(df_gas)
         q=0
         p1,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
-        if sum(edited_df['input']) != 0:
+        if D != 0 and p1 != 0 and p2 !=0 :
             try:
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
@@ -483,27 +503,30 @@ def main():
                     mu,rho1 = get_viscosity(df_comp,p1,t)
                     mu,rho2 = get_viscosity(df_comp,p2,t)
                     k = k_calculations(df_comp,df_comp_table,t,t)
-                    Q_std[:3] = gas_equations(q,p1,p2,D,G,L,t,z,mu,'estimate quantity')
+                    
             except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
             except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table22'):
-            
-            Q_std[10],f = general_gas_equation(Q_std[0],p1,p2,D,G,z,L,t,mu,'estimate quantity')
-            
-            Q_std[9] = NeqSim_calculations(Q_std[10],D,df_comp,t,p1,p2,L,'estimate quantity')
-            df_result = pd.DataFrame(df_summary)
-            df_result['General Gas'] = Summary_calculations(Q_std[10],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,np.nan,p1,p2,t,m_wt,k,rho2,L,z)
-            
-            df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
-            df_result['Weymouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z)
-            
+            try:
+                dp_100m = ((p1 - p2)*100)/L
+                Q_std[:3] = gas_equations(q,p1,p2,D,G,L,t,z,mu,'estimate quantity')
+                Q_std[10],f = general_gas_equation(Q_std[0],p1,p2,D,G,z,L,t,mu,'estimate quantity')
+                
+                Q_std[9] = NeqSim_calculations(Q_std[10],D,df_comp,t,p1,p2,L,'estimate quantity')
+                df_result = pd.DataFrame(df_summary)
+                df_result['General Gas'] = Summary_calculations(Q_std[10],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,np.nan,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                
+                df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                df_result['Weymouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                
 
-            st.dataframe(df_result)
-            st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download1")
-            graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
+                st.dataframe(df_result)
+                st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download1")
+                graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
+            except UnboundLocalError: st.write('Check your data input!')
             
     elif s1 == "Gas - estimate Upstream pressure (kg/cm2.a)":
         st.write('## Estimation of Equivalent Length') 
@@ -518,7 +541,7 @@ def main():
         
         
         q,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
-        if sum(edited_df['input']) != 0:
+        if D != 0 and p2 != 0:
             try:
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
@@ -541,21 +564,23 @@ def main():
             except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table_P1'):
-            P1[:3] = gas_equations(q,None,p2,D,G,L,t,z,mu,"estimate upstream pressure")
-            P1[4],f = general_gas_equation(q,None,p2,D,G,z,L,t,mu,"estimate upstream pressure")
-            
-            P1[3] = NeqSim_calculations(q,D,df_comp,t,P1[0],p2,L,"estimate upstream pressure")
-            
-            df_result = pd.DataFrame(df_summary)
-            df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,P1[4],p2,t,m_wt,k,rho2,L,z)
-            df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,P1[3],p2,t,m_wt,k,rho2,L,z)
-            
-            df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,P1[0],p2,t,m_wt,k,rho2,L,z)
-            df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,P1[1],p2,t,m_wt,k,rho2,L,z)
-            df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,P1[2],p2,t,m_wt,k,rho2,L,z)
-            st.dataframe(df_result)
-            st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download2")
-            graph_NeqSim(q,D,df_comp,t,P1[3],L)
+            try:
+                P1[:3] = gas_equations(q,None,p2,D,G,L,t,z,mu,"estimate upstream pressure")
+                P1[4],f = general_gas_equation(q,None,p2,D,G,z,L,t,mu,"estimate upstream pressure")
+                
+                P1[3] = NeqSim_calculations(q,D,df_comp,t,P1[0],p2,L,"estimate upstream pressure")
+                dp_100m = ((np.array(P1) -p2)*100)/L
+                df_result = pd.DataFrame(df_summary)
+                df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,P1[4],p2,t,m_wt,k,rho2,L,z,dp_100m[4])
+                df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,P1[3],p2,t,m_wt,k,rho2,L,z,dp_100m[3])
+                
+                df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,P1[0],p2,t,m_wt,k,rho2,L,z,dp_100m[0])
+                df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,P1[1],p2,t,m_wt,k,rho2,L,z,dp_100m[1])
+                df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,P1[2],p2,t,m_wt,k,rho2,L,z,dp_100m[2])
+                st.dataframe(df_result)
+                st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download2")
+                graph_NeqSim(q,D,df_comp,t,P1[3],L)
+            except UnboundLocalError: st.write('Check your data input!')
     elif s1 == "Gas - estimate Downstream pressure (kg/cm2.a)":
         st.write('## Estimation of Equivalent Length') 
         st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
@@ -569,7 +594,7 @@ def main():
         
         
         q,p1,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
-        if sum(edited_df['input']) != 0:
+        if D != 0 and p1 != 0:
             try:
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
@@ -590,21 +615,24 @@ def main():
             except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table_P2'):
-            P2[:3] = gas_equations(q,p1,None,D,G,L,t,z,mu,"estimate downstream pressure")
-            P2[4],f = general_gas_equation(q,p1,None,D,G,z,L,t,mu,"estimate downstream pressure")
-            
-            P2[3] = NeqSim_calculations(q,D,df_comp,t,p1,P2[0],L,"estimate downstream pressure")
-            
-            df_result = pd.DataFrame(df_summary)
-            df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,p1,P2[4],t,m_wt,k,rho1,L,z)
-            df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,p1,P2[3],t,m_wt,k,rho1,L,z)
-            
-            df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[0],t,m_wt,k,rho1,L,z)
-            df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[1],t,m_wt,k,rho1,L,z)
-            df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[2],t,m_wt,k,rho1,L,z)
-            st.dataframe(df_result)
-            st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download3")
-            graph_NeqSim(q,D,df_comp,t,p1,L)
+            try:
+                P2[:3] = gas_equations(q,p1,None,D,G,L,t,z,mu,"estimate downstream pressure")
+                P2[4],f = general_gas_equation(q,p1,None,D,G,z,L,t,mu,"estimate downstream pressure")
+                
+                P2[3] = NeqSim_calculations(q,D,df_comp,t,p1,P2[0],L,"estimate downstream pressure")
+                dp_100m = ((p1 - np.array(P2) )*100)/L
+                df_result = pd.DataFrame(df_summary)
+                df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,p1,P2[4],t,m_wt,k,rho1,L,z,dp_100m[4])
+                df_result['NeqSim Simulator'] = Summary_calculations(q,D,G,mu,0,p1,P2[3],t,m_wt,k,rho1,L,z,dp_100m[3])
+                
+                df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[0],t,m_wt,k,rho1,L,z,dp_100m[0])
+                df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[1],t,m_wt,k,rho1,L,z,dp_100m[1])
+                df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[2],t,m_wt,k,rho1,L,z,dp_100m[2])
+                st.dataframe(df_result)
+                st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download3")
+                graph_NeqSim(q,D,df_comp,t,p1,L)
+            except UnboundLocalError: st.write('Check your data input!')
+            except ValueError: st.warning('Check your assumptions: Empirical equations couldnt find a valid solution')
     elif s1 == 'Liquid pressure drop/NPSHa':
         st.write('## Estimation of Equivalent Length') 
         st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
@@ -714,7 +742,7 @@ def main():
                 
                 selected_columns = st.selectbox('Select fitting', options=df_Le.columns)
                 selected_indices = st.selectbox('Select diameter/d', options=df_Le.index)
-                count = st.slider('Count of fiiting', 1, 10, 1)
+                count = st.slider('Count of fittings', 1, 10, 1)
                 fittings_list.append([selected_indices,selected_columns,df_Le.loc[selected_indices,selected_columns],count])
                 
                 
