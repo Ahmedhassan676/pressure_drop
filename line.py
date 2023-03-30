@@ -505,13 +505,13 @@ def main():
                     try:
                             df_comp = choose_composition()
                             if df_comp['mol%].sum() == 100:
-                               z1, m_wt = Z_calculations(df_comp,t,p1)
-                               z2, m_wt = Z_calculations(df_comp,t,p2)
-                               G = m_wt/29
-                               z = (z1+z2)*0.5
-                               mu,rho1 = get_viscosity(df_comp,p1,t)
-                               mu,rho2 = get_viscosity(df_comp,p2,t)
-                               k = k_calculations(df_comp,df_comp_table,t,t)
+                                    z1, m_wt = Z_calculations(df_comp,t,p1)
+                                    z2, m_wt = Z_calculations(df_comp,t,p2)
+                                    G = m_wt/29
+                                    z = (z1+z2)*0.5
+                                    mu,rho1 = get_viscosity(df_comp,p1,t)
+                                    mu,rho2 = get_viscosity(df_comp,p2,t)
+                                    k = k_calculations(df_comp,df_comp_table,t,t)
                             
                     except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
                     except UnboundLocalError: pass
