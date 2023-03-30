@@ -12,7 +12,7 @@ from neqsim.thermo import fluid, TPflash, createfluid2
 from neqsim.process import pipe, pipeline, clearProcess, stream, runProcess
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
-
+import jpype 
 
 url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
 df_gas = pd.read_csv(url, index_col=[0])
@@ -527,7 +527,24 @@ def main():
                 st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download1")
                 graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
             except UnboundLocalError: st.write('Check your data input!')
-            
+            except jpype.JException: 
+                dp_100m = ((p1 - p2)*100)/L
+                Q_std[:3] = gas_equations(q,p1,p2,D,G,L,t,z,mu,'estimate quantity')
+                Q_std[10],f = general_gas_equation(Q_std[0],p1,p2,D,G,z,L,t,mu,'estimate quantity')
+                
+                
+                df_result = pd.DataFrame(df_summary)
+                df_result['General Gas'] = Summary_calculations(Q_std[10],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                del df_result['NeqSim Simulator'] 
+                
+                df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                df_result['Weymouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                
+
+                st.dataframe(df_result)
+                st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download1")
+                st.warning('Neqsim simulator couldnt converge')
     elif s1 == "Gas - estimate Upstream pressure (kg/cm2.a)":
         st.write('## Estimation of Equivalent Length') 
         st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
@@ -581,6 +598,23 @@ def main():
                 st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download2")
                 graph_NeqSim(q,D,df_comp,t,P1[3],L)
             except UnboundLocalError: st.write('Check your data input!')
+            except jpype.JException: 
+                P1[:3] = gas_equations(q,None,p2,D,G,L,t,z,mu,"estimate upstream pressure")
+                P1[4],f = general_gas_equation(q,None,p2,D,G,z,L,t,mu,"estimate upstream pressure")
+                
+                
+                dp_100m = ((np.array(P1) -p2)*100)/L
+                df_result = pd.DataFrame(df_summary)
+                df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,P1[4],p2,t,m_wt,k,rho2,L,z,dp_100m[4])
+                del df_result['NeqSim Simulator'] 
+                
+                df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,P1[0],p2,t,m_wt,k,rho2,L,z,dp_100m[0])
+                df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,P1[1],p2,t,m_wt,k,rho2,L,z,dp_100m[1])
+                df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,P1[2],p2,t,m_wt,k,rho2,L,z,dp_100m[2])
+                st.dataframe(df_result)
+                st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download2")
+                st.warning('Neqsim simulator couldnt converge')
+            
     elif s1 == "Gas - estimate Downstream pressure (kg/cm2.a)":
         st.write('## Estimation of Equivalent Length') 
         st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
@@ -633,6 +667,22 @@ def main():
                 graph_NeqSim(q,D,df_comp,t,p1,L)
             except UnboundLocalError: st.write('Check your data input!')
             except ValueError: st.warning('Check your assumptions: Empirical equations couldnt find a valid solution')
+            except jpype.JException: 
+                P2[:3] = gas_equations(q,p1,None,D,G,L,t,z,mu,"estimate downstream pressure")
+                P2[4],f = general_gas_equation(q,p1,None,D,G,z,L,t,mu,"estimate downstream pressure")
+                
+                
+                dp_100m = ((p1 - np.array(P2) )*100)/L
+                df_result = pd.DataFrame(df_summary)
+                df_result['General Gas'] = Summary_calculations(q,D,G,mu,f,p1,P2[4],t,m_wt,k,rho1,L,z,dp_100m[4])
+                del df_result['NeqSim Simulator'] 
+                
+                df_result['Panhandle_A'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[0],t,m_wt,k,rho1,L,z,dp_100m[0])
+                df_result['Panhandle_B'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[1],t,m_wt,k,rho1,L,z,dp_100m[1])
+                df_result['Weymouth'] = Summary_calculations(q,D,G,mu,0.95,p1,P2[2],t,m_wt,k,rho1,L,z,dp_100m[2])
+                st.dataframe(df_result)
+                st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download3")
+                st.warning('Neqsim simulator couldnt converge')
     elif s1 == 'Liquid pressure drop/NPSHa':
         st.write('## Estimation of Equivalent Length') 
         st.write("""When the piping layout is not available, the equivalent length (Le) of the piping will be estimated based on the straight length (Ls) as follows:\n 1. Process area: 3.0 times Ls\n 2. Common area: 1.5 times Ls\n 3. Offsite area: 1.3 times Ls""")
