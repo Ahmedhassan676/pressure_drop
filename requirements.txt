@@ -4,4 +4,4 @@ numpy
 neqsim
 matplotlib
 fluids
-Jpype
+
