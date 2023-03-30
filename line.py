@@ -509,23 +509,26 @@ def main():
 
         if st.button("Reveal Calculations", key = 'calculations_table22'):
             try:
-                dp_100m = ((p1 - p2)*100)/L
-                Q_std[:3] = gas_equations(q,p1,p2,D,G,L,t,z,mu,'estimate quantity')
-                Q_std[10],f = general_gas_equation(Q_std[0],p1,p2,D,G,z,L,t,mu,'estimate quantity')
-                
-                Q_std[9] = NeqSim_calculations(Q_std[10],D,df_comp,t,p1,p2,L,'estimate quantity')
-                df_result = pd.DataFrame(df_summary)
-                df_result['General Gas'] = Summary_calculations(Q_std[10],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
-                df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,np.nan,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
-                
-                df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
-                df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
-                df_result['Weymouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
-                
+                if p2 > p1:
+                     st.warning('Downstream presure is higher than Upstream pressure!')
+                else:
+                    dp_100m = ((p1 - p2)*100)/L
+                    Q_std[:3] = gas_equations(q,p1,p2,D,G,L,t,z,mu,'estimate quantity')
+                    Q_std[10],f = general_gas_equation(Q_std[0],p1,p2,D,G,z,L,t,mu,'estimate quantity')
+                    
+                    Q_std[9] = NeqSim_calculations(Q_std[10],D,df_comp,t,p1,p2,L,'estimate quantity')
+                    df_result = pd.DataFrame(df_summary)
+                    df_result['General Gas'] = Summary_calculations(Q_std[10],D,G,mu,f,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                    df_result['NeqSim Simulator'] = Summary_calculations(Q_std[9],D,G,mu,np.nan,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                    
+                    df_result['Panhandle_A'] = Summary_calculations(Q_std[0],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                    df_result['Panhandle_B'] = Summary_calculations(Q_std[1],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                    df_result['Weymouth'] = Summary_calculations(Q_std[2],D,G,mu,0.95,p1,p2,t,m_wt,k,rho2,L,z,dp_100m)
+                    
 
-                st.dataframe(df_result)
-                st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download1")
-                graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
+                    st.dataframe(df_result)
+                    st.download_button("Click to download your calculations table!", convert_data(df_result.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download1")
+                    graph_NeqSim(Q_std[9],D,df_comp,t,p1,L)
             except UnboundLocalError: st.write('Check your data input!')
             except jpype.JException: 
                 dp_100m = ((p1 - p2)*100)/L
