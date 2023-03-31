@@ -13,6 +13,10 @@ from neqsim.process import pipe, pipeline, clearProcess, stream, runProcess
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 import jpype 
+import warnings
+
+#suppress warnings
+warnings.filterwarnings('ignore')
 
 url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
 df_gas = pd.read_csv(url, index_col=[0])
