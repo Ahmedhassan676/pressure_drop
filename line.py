@@ -81,28 +81,7 @@ def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z,dp_100m):
         rho_v_2 = rho2*(v**2)
         summary_list = [p1,p2,t,L,D,Q_std,Q_normal,Q_actual,dp_percent,dp_100m,f_E,Re,v,sonic_velocity,mach,rho_v_2,m_wt,z,k,1/np.sqrt(k),mu]
         return summary_list
-def Z_calculations(df,t_suc,p_suc):
-        with np.errstate(all='ignore'):
-             pc = np.sum(df['mol%']*df['Pc']) * 0.01
-             tc = np.sum(df['mol%']*(df['Tc']+460)) * 0.01  
-             m_wt = np.sum(df['mol%']*df['m.wt'])*0.01
-             Tr = (t_suc*1.8 + 32+460)/tc
-             Pr = (p_suc +1.03323)*14.2233/pc
-             A = [1,0.31506237,-1.04670990,-0.57832729,0.53530771,-0.61232032,-0.10488813,0.68157001,0.68446549]
-             rho = (0.27*Pr)/Tr
-             Z = 1
-             error = 10
-             y = 1/0.84
-             while error > 0.001:
-                 part_1 = (A[1]+(A[2]/Tr)+(A[3]/(Tr**3)))*rho*y
-                 part_2 = (A[4]+(A[5]/Tr))*(rho**2)*(y**2)
-                 part_3 = ((A[5]*A[6]*(rho**5)*(y**5))/Tr)
-                 part_4 = (A[7]*(rho**3)*(y**3))/((Tr**3)*(1+(A[8]*(rho**2)*(y**2)))*np.exp(-A[8]*(rho**2)*(y**2)))
-                 Z = A[0]+part_1+part_2+ part_3 + part_4 
-                 error = abs(Z-(1/y))
-                 y = 1/Z 
-        
-        return Z, m_wt
+
 def choose_composition():
             
             df = pd.DataFrame({'Composition/property':df_comp_table.columns[1:],'mol%':np.zeros(len(df_comp_table.columns)-1), 'm.wt':df_comp_table.iloc[0,1:],'Pc':df_comp_table.iloc[1,1:],'Tc':df_comp_table.iloc[2,1:]})
@@ -386,7 +365,10 @@ def get_viscosity(df_comp,p1,t):
         fluid1.initProperties()
         mu = fluid1.getViscosity('cP')
         rho = fluid1.getDensity('kg/m3')
-        return mu, rho
+        z_factor = fluid1.getZ()
+        m_wt_1 = fluid1.getMolarMass()*1000
+        
+        return mu, rho,z_factor, m_wt_1
 
 def general_gas_equation(q,p1,p2,D,G,z,L,t,mu,type):
     if type == 'estimate quantity':
@@ -529,15 +511,17 @@ def main():
                 try:
                     df_comp = choose_composition()
                     
-                    z1, m_wt = Z_calculations(df_comp,t,p1)
-                    z2, m_wt = Z_calculations(df_comp,t,p2)
+                    
+                    
+                    
+                    mu1,rho1,z1,m_wt = get_viscosity(df_comp,p1,t)
+                    mu2,rho2,z2,m_wt = get_viscosity(df_comp,p2,t)
                     G = m_wt/29
                     z = (z1+z2)*0.5
-                    mu,rho1 = get_viscosity(df_comp,p1,t)
-                    mu,rho2 = get_viscosity(df_comp,p2,t)
+                    mu = (mu1 + mu2)*0.5
                     k = k_calculations(df_comp,df_comp_table,t,t)
                             
-                except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+                except (ValueError,TypeError,AttributeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
                 except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table22'):
@@ -614,15 +598,14 @@ def main():
             else:
                 try:
                     df_comp = choose_composition()
-                    z2, m_wt = Z_calculations(df_comp,t,p2)
-                    z = z2
+                    
+                    mu,rho2,z, m_wt = get_viscosity(df_comp,p2,t)
                     G = m_wt/29
-                    mu,rho2 = get_viscosity(df_comp,p2,t)
                     k = k_calculations(df_comp,df_comp_table,t,t)
                     
                     
                     
-                except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+                except (ValueError,TypeError,AttributeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
                 except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table_P1'):
@@ -696,17 +679,13 @@ def main():
             else:
                     try:
                             df_comp = choose_composition()
-                            
-                            z1, m_wt = Z_calculations(df_comp,t,p1)
-                            
-                            z = z1
+                            mu,rho1,z, m_wt = get_viscosity(df_comp,p1,t)
                             G = m_wt/29
-                            mu,rho1 = get_viscosity(df_comp,p1,t)
                             k = k_calculations(df_comp,df_comp_table,t,t)
                             
                             
                             
-                    except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+                    except (ValueError,AttributeError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
                     except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table_P2'):
