@@ -502,22 +502,24 @@ def main():
                     mu= st.number_input('Viscosity (Cp)', key = 'vis')
                     G = m_wt/29
             else:
-                    try:
-                            done = False
-                            df_comp, done = choose_composition()
-                            if done == True:
-                                z1, m_wt = Z_calculations(df_comp,t,p1)
-                                z2, m_wt = Z_calculations(df_comp,t,p2)
-                                G = m_wt/29
-                                z = (z1+z2)*0.5
-                                mu,rho1 = get_viscosity(df_comp,p1,t)
-                                mu,rho2 = get_viscosity(df_comp,p2,t)
-                                k = k_calculations(df_comp,df_comp_table,t,t)
-                            
+                    try:     
+                        df_comp = choose_composition()
                     except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
                     except UnboundLocalError: pass
+                            
 
         if st.button("Reveal Calculations", key = 'calculations_table22'):
+            try:
+                    z1, m_wt = Z_calculations(df_comp,t,p1)
+                    z2, m_wt = Z_calculations(df_comp,t,p2)
+                    G = m_wt/29
+                    z = (z1+z2)*0.5
+                    mu,rho1 = get_viscosity(df_comp,p1,t)
+                    mu,rho2 = get_viscosity(df_comp,p2,t)
+                    k = k_calculations(df_comp,df_comp_table,t,t)
+                            
+            except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+            except UnboundLocalError: pass
             try:
                 if p2 > p1:
                      st.warning('Downstream presure is higher than Upstream pressure!')
