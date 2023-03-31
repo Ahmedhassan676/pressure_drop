@@ -17,15 +17,34 @@ import warnings
 
 #suppress warnings
 warnings.filterwarnings('ignore')
+@st.cache_data
+def load_data_gas():
+    url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
 
-url ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table.csv'
-df_gas = pd.read_csv(url, index_col=[0])
-url_1 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp.csv'
-df_comp_table = pd.read_csv(url_1)
-url_2 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
-df_summary = pd.read_csv(url_2, index_col=[0])
-url_3 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
-df_liq = pd.read_csv(url_3, index_col=[0])
+    return pd.read_csv(url, index_col=[0])
+
+df_gas = load_data_gas()
+@st.cache_data
+def load_data_comptable():
+    url_1 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/comp.csv'
+
+    return pd.read_csv(url_1)
+
+df_comp_table = load_data_comptable()
+@st.cache_data
+def load_data_summary():
+    url_2 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/summary.csv'
+
+    return pd.read_csv(url_2, index_col=[0])
+
+df_summary = load_data_summary()
+@st.cache_data
+def load_data_liq():
+    url_3 ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/table_liq.csv'
+
+    return pd.read_csv(url_3, index_col=[0])
+
+df_liq = load_data_liq()
 
 def convert_data(df):
      csv = df.to_csv(index=False).encode('utf-8')
@@ -925,7 +944,12 @@ def main():
                             df = df[df[column].astype(str).str.contains(user_text_input.lower())]
 
             return df
-        df = pd.read_csv('http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/criteria.csv', index_col=[0])
+        @st.cache_data
+        def load_data_stds():
+            url_stds ='http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/criteria.csv'
+
+            return pd.read_csv(url_stds, index_col=[0])
+        df = load_data_stds()
         st.dataframe(filter_dataframe(df))
         st.write('Based On an Excel sheet Compiled by: Ajay S. Satpute')
 if __name__ == '__main__':
