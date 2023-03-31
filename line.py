@@ -503,6 +503,7 @@ def main():
                     G = m_wt/29
             else:
                     try:
+                            done = False
                             df_comp, done = choose_composition()
                             if done == True:
                                 z1, m_wt = Z_calculations(df_comp,t,p1)
