@@ -581,25 +581,25 @@ def main():
             P1 = [0,0,0,0,0,0,0,0,0,0,0]
             s_select = st.selectbox('Estimate M.wt, Cp/Cv and Z, Density and Viscosity?',('Yes','I already have these values'), key = 'k_calculations')
             if s_select == 'I already have these values':
-                    m_wt= st.number_input('Molecular weight' , key = 'mwt')
-                    z= st.number_input('Compressibility factor', key = 'z')
-                    k= st.number_input('Cp/Cv', key = 'k')
-                    rho2= st.number_input('Density (kg/m3)', key = 'rho')
-                    mu= st.number_input('Viscosity (Cp)', key = 'vis')
-                    G = m_wt/29
+                m_wt= st.number_input('Molecular weight' , key = 'mwt')
+                z= st.number_input('Compressibility factor', key = 'z')
+                k= st.number_input('Cp/Cv', key = 'k')
+                rho2= st.number_input('Density (kg/m3)', key = 'rho')
+                mu= st.number_input('Viscosity (Cp)', key = 'vis')
+                G = m_wt/29
             else:
-                    try:
-                            df_comp = choose_composition()
-                            z2, m_wt = Z_calculations(df_comp,t,p2)
-                            z = z2
-                            G = m_wt/29
-                            mu,rho2 = get_viscosity(df_comp,p2,t)
-                            k = k_calculations(df_comp,df_comp_table,t,t)
-                        
-                        
-                        
-                    except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
-                    except UnboundLocalError: pass
+                try:
+                    df_comp = choose_composition()
+                    z2, m_wt = Z_calculations(df_comp,t,p2)
+                    z = z2
+                    G = m_wt/29
+                    mu,rho2 = get_viscosity(df_comp,p2,t)
+                    k = k_calculations(df_comp,df_comp_table,t,t)
+                    
+                    
+                    
+                except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
+                except UnboundLocalError: pass
 
         if st.button("Reveal Calculations", key = 'calculations_table_P1'):
             try:
