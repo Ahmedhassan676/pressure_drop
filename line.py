@@ -135,7 +135,7 @@ def choose_composition():
                         
                 st.success('Composition in Mol. percent completed!', icon="✅")
                 
-                return df[df['mol%'] != 0]
+                return df[df['mol%'] != 0] ,True
 
             except (ValueError, st.errors.DuplicateWidgetID): pass
             except (TypeError, KeyError, ZeroDivisionError):st.write('Please Check your data')
@@ -488,7 +488,7 @@ def main():
         edited_df = st.experimental_data_editor(df_gas)
         q=0
         p1,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
-        if edited_df['input'].sum() != 0:
+        if D != 0 and p1 != 0 and p2 !=0 :
             try:
                 D = fluids.nearest_pipe(NPS=find_nearest(D))[1]
             except ValueError: pass
@@ -503,15 +503,15 @@ def main():
                     G = m_wt/29
             else:
                     try:
-                            df_comp = choose_composition()
-                            if df_comp['mol%'].sum() == 100:
-                                    z1, m_wt = Z_calculations(df_comp,t,p1)
-                                    z2, m_wt = Z_calculations(df_comp,t,p2)
-                                    G = m_wt/29
-                                    z = (z1+z2)*0.5
-                                    mu,rho1 = get_viscosity(df_comp,p1,t)
-                                    mu,rho2 = get_viscosity(df_comp,p2,t)
-                                    k = k_calculations(df_comp,df_comp_table,t,t)
+                            df_comp, done = choose_composition()
+                            if done == True:
+                                z1, m_wt = Z_calculations(df_comp,t,p1)
+                                z2, m_wt = Z_calculations(df_comp,t,p2)
+                                G = m_wt/29
+                                z = (z1+z2)*0.5
+                                mu,rho1 = get_viscosity(df_comp,p1,t)
+                                mu,rho2 = get_viscosity(df_comp,p2,t)
+                                k = k_calculations(df_comp,df_comp_table,t,t)
                             
                     except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
                     except UnboundLocalError: pass
@@ -589,12 +589,13 @@ def main():
                     G = m_wt/29
             else:
                     try:
-                            df_comp = choose_composition()
-                            z2, m_wt = Z_calculations(df_comp,t,p2)
-                            z = z2
-                            G = m_wt/29
-                            mu,rho2 = get_viscosity(df_comp,p2,t)
-                            k = k_calculations(df_comp,df_comp_table,t,t)
+                            df_comp, done = choose_composition()
+                            if done == True:
+                                z2, m_wt = Z_calculations(df_comp,t,p2)
+                                z = z2
+                                G = m_wt/29
+                                mu,rho2 = get_viscosity(df_comp,p2,t)
+                                k = k_calculations(df_comp,df_comp_table,t,t)
                         
                         
                         
@@ -671,14 +672,15 @@ def main():
                     G = m_wt/29
             else:
                     try:
-                            df_comp = choose_composition()
+                            df_comp, done = choose_composition()
+                            if done == True:
                             
-                            z1, m_wt = Z_calculations(df_comp,t,p1)
-                            
-                            z = z1
-                            G = m_wt/29
-                            mu,rho1 = get_viscosity(df_comp,p1,t)
-                            k = k_calculations(df_comp,df_comp_table,t,t)
+                                z1, m_wt = Z_calculations(df_comp,t,p1)
+                                
+                                z = z1
+                                G = m_wt/29
+                                mu,rho1 = get_viscosity(df_comp,p1,t)
+                                k = k_calculations(df_comp,df_comp_table,t,t)
                             
                             
                             
