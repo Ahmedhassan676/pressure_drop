@@ -68,7 +68,7 @@ def Z_calculations(df,t_suc,p_suc):
         rho = (0.27*Pr)/Tr
         Z = 1
         error = 10
-        y = 1.111111
+        y = 1/0.9
         while error > 0.001:
             part_1 = (A[1]+(A[2]/Tr)+(A[3]/(Tr**3)))*rho*y
             part_2 = (A[4]+(A[5]/Tr))*(rho**2)*(y**2)
@@ -135,7 +135,7 @@ def choose_composition():
                         
                 st.success('Composition in Mol. percent completed!', icon="✅")
                 
-                return df[df['mol%'] != 0] ,True
+                return df[df['mol%'] != 0]
 
             except (ValueError, st.errors.DuplicateWidgetID): pass
             except (TypeError, KeyError, ZeroDivisionError):st.write('Please Check your data')
@@ -502,24 +502,21 @@ def main():
                     mu= st.number_input('Viscosity (Cp)', key = 'vis')
                     G = m_wt/29
             else:
-                    try:     
-                        df_comp = choose_composition()
+                    try:
+                            df_comp = choose_composition()
+                            
+                            z1, m_wt = Z_calculations(df_comp,t,p1)
+                            z2, m_wt = Z_calculations(df_comp,t,p2)
+                            G = m_wt/29
+                            z = (z1+z2)*0.5
+                            mu,rho1 = get_viscosity(df_comp,p1,t)
+                            mu,rho2 = get_viscosity(df_comp,p2,t)
+                            k = k_calculations(df_comp,df_comp_table,t,t)
+                            
                     except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
                     except UnboundLocalError: pass
-                            
 
         if st.button("Reveal Calculations", key = 'calculations_table22'):
-            try:
-                    z1, m_wt = Z_calculations(df_comp,t,p1)
-                    z2, m_wt = Z_calculations(df_comp,t,p2)
-                    G = m_wt/29
-                    z = (z1+z2)*0.5
-                    mu,rho1 = get_viscosity(df_comp,p1,t)
-                    mu,rho2 = get_viscosity(df_comp,p2,t)
-                    k = k_calculations(df_comp,df_comp_table,t,t)
-                            
-            except (ValueError,TypeError, KeyError, ZeroDivisionError):st.write('your total mol. percent should add up to 100')
-            except UnboundLocalError: pass
             try:
                 if p2 > p1:
                      st.warning('Downstream presure is higher than Upstream pressure!')
@@ -592,9 +589,7 @@ def main():
                     G = m_wt/29
             else:
                     try:
-                        done = False
-                        df_comp, done = choose_composition()
-                        if done == True:
+                            df_comp = choose_composition()
                             z2, m_wt = Z_calculations(df_comp,t,p2)
                             z = z2
                             G = m_wt/29
@@ -676,15 +671,14 @@ def main():
                     G = m_wt/29
             else:
                     try:
-                            df_comp, done = choose_composition()
-                            if done == True:
+                            df_comp = choose_composition()
                             
-                                z1, m_wt = Z_calculations(df_comp,t,p1)
-                                
-                                z = z1
-                                G = m_wt/29
-                                mu,rho1 = get_viscosity(df_comp,p1,t)
-                                k = k_calculations(df_comp,df_comp_table,t,t)
+                            z1, m_wt = Z_calculations(df_comp,t,p1)
+                            
+                            z = z1
+                            G = m_wt/29
+                            mu,rho1 = get_viscosity(df_comp,p1,t)
+                            k = k_calculations(df_comp,df_comp_table,t,t)
                             
                             
                             
