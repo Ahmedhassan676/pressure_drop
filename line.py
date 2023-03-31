@@ -349,23 +349,28 @@ def graph_NeqSim(q,D,df_comp,t,p1,L):
             st.pyplot(fig)   
             
 def get_viscosity(df_comp,p1,t):
-        
-        
-        #Creating inlet fluid using SRK-EoS
+         
+        # define component list and mol. fraction
         names =  list(df_comp.index.str.lower())
         molefractions = list(df_comp['mol%']*0.01)
+        #Creating fluid stream using SRK-EoS
         fluid1 = createfluid2(names, molefractions)
         fluid1.setMixingRule('classic')
+        # Set temperature, pressure and flow rate
         fluid1.setTemperature(t, "C")
         fluid1.setPressure(p1, "bara")
         fluid1.setTotalFlowRate(1, "MSm3/day")
         TPflash(fluid1)
+        #Obtaining viscosity of your stream
         method = "friction theory"
         fluid1.getPhase('gas').getPhysicalProperties().setViscosityModel(method)
         fluid1.initProperties()
         mu = fluid1.getViscosity('cP')
+        #obtain Density of your stream
         rho = fluid1.getDensity('kg/m3')
+        # Obtain Compressibilty factor
         z_factor = fluid1.getZ()
+        # Obtain Mol. weight!
         m_wt_1 = fluid1.getMolarMass()*1000
         
         return mu, rho,z_factor, m_wt_1
@@ -822,8 +827,13 @@ def main():
                 st.dataframe(df_liq)
                 st.download_button("Click to download your calculations table!", convert_data(df_liq.reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download4")
     elif s1 == 'Estimate Equivalent Length':
-            url4 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/equ_length.csv'
-            df_Le = pd.read_csv(url4, index_col=[0])
+            @st.cache_data
+            def load_data_Le():
+                url_5 = 'http://raw.githubusercontent.com/Ahmedhassan676/pressure_drop/main/equ_length.csv'
+
+                return pd.read_csv(url_5, index_col=[0])
+            
+            df_Le = load_data_Le()
             Length = st.number_input('Insert pipe straight length (m)', key = 'pipe')
             if "df" not in st.session_state:
                 st.session_state.df = pd.DataFrame(columns=[0,1,2,3])
