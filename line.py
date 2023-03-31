@@ -589,13 +589,14 @@ def main():
                     G = m_wt/29
             else:
                     try:
-                            df_comp, done = choose_composition()
-                            if done == True:
-                                z2, m_wt = Z_calculations(df_comp,t,p2)
-                                z = z2
-                                G = m_wt/29
-                                mu,rho2 = get_viscosity(df_comp,p2,t)
-                                k = k_calculations(df_comp,df_comp_table,t,t)
+                        done = False
+                        df_comp, done = choose_composition()
+                        if done == True:
+                            z2, m_wt = Z_calculations(df_comp,t,p2)
+                            z = z2
+                            G = m_wt/29
+                            mu,rho2 = get_viscosity(df_comp,p2,t)
+                            k = k_calculations(df_comp,df_comp_table,t,t)
                         
                         
                         
