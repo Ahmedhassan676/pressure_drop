@@ -63,7 +63,7 @@ def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z,dp_100m):
         summary_list = [p1,p2,t,L,D,Q_std,Q_normal,Q_actual,dp_percent,dp_100m,f_E,Re,v,sonic_velocity,mach,rho_v_2,m_wt,z,k,1/np.sqrt(k),mu]
         return summary_list
 def Z_calculations(df,t_suc,p_suc):
-        if df['mol%'].sum()==100:
+        with np.errstate(all='ignore'):
              pc = np.sum(df['mol%']*df['Pc']) * 0.01
              tc = np.sum(df['mol%']*(df['Tc']+460)) * 0.01  
              m_wt = np.sum(df['mol%']*df['m.wt'])*0.01
