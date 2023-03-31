@@ -59,24 +59,25 @@ def Summary_calculations(Q_std,D,G,mu,f_E,p1,p2,t,m_wt,k,rho2,L,z,dp_100m):
         summary_list = [p1,p2,t,L,D,Q_std,Q_normal,Q_actual,dp_percent,dp_100m,f_E,Re,v,sonic_velocity,mach,rho_v_2,m_wt,z,k,1/np.sqrt(k),mu]
         return summary_list
 def Z_calculations(df,t_suc,p_suc):
-        pc = np.sum(df['mol%']*df['Pc']) * 0.01
-        tc = np.sum(df['mol%']*(df['Tc']+460)) * 0.01  
-        m_wt = np.sum(df['mol%']*df['m.wt'])*0.01
-        Tr = (t_suc*1.8 + 32+460)/tc
-        Pr = (p_suc +1.03323)*14.2233/pc
-        A = [1,0.31506237,-1.04670990,-0.57832729,0.53530771,-0.61232032,-0.10488813,0.68157001,0.68446549]
-        rho = (0.27*Pr)/Tr
-        Z = 1
-        error = 10
-        y = 1/0.84
-        while error > 0.001:
-            part_1 = (A[1]+(A[2]/Tr)+(A[3]/(Tr**3)))*rho*y
-            part_2 = (A[4]+(A[5]/Tr))*(rho**2)*(y**2)
-            part_3 = ((A[5]*A[6]*(rho**5)*(y**5))/Tr)
-            part_4 = (A[7]*(rho**3)*(y**3))/((Tr**3)*(1+(A[8]*(rho**2)*(y**2)))*np.exp(-A[8]*(rho**2)*(y**2)))
-            Z = A[0]+part_1+part_2+ part_3 + part_4 
-            error = abs(Z-(1/y))
-            y = 1/Z 
+        if df['mol%'].sum()==100:
+             pc = np.sum(df['mol%']*df['Pc']) * 0.01
+             tc = np.sum(df['mol%']*(df['Tc']+460)) * 0.01  
+             m_wt = np.sum(df['mol%']*df['m.wt'])*0.01
+             Tr = (t_suc*1.8 + 32+460)/tc
+             Pr = (p_suc +1.03323)*14.2233/pc
+             A = [1,0.31506237,-1.04670990,-0.57832729,0.53530771,-0.61232032,-0.10488813,0.68157001,0.68446549]
+             rho = (0.27*Pr)/Tr
+             Z = 1
+             error = 10
+             y = 1/0.84
+             while error > 0.001:
+                 part_1 = (A[1]+(A[2]/Tr)+(A[3]/(Tr**3)))*rho*y
+                 part_2 = (A[4]+(A[5]/Tr))*(rho**2)*(y**2)
+                 part_3 = ((A[5]*A[6]*(rho**5)*(y**5))/Tr)
+                 part_4 = (A[7]*(rho**3)*(y**3))/((Tr**3)*(1+(A[8]*(rho**2)*(y**2)))*np.exp(-A[8]*(rho**2)*(y**2)))
+                 Z = A[0]+part_1+part_2+ part_3 + part_4 
+                 error = abs(Z-(1/y))
+                 y = 1/Z 
         
         return Z, m_wt
 def choose_composition():
