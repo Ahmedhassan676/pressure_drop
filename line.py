@@ -68,7 +68,7 @@ def Z_calculations(df,t_suc,p_suc):
         rho = (0.27*Pr)/Tr
         Z = 1
         error = 10
-        y = 1/0.9
+        y = 1.111111
         while error > 0.001:
             part_1 = (A[1]+(A[2]/Tr)+(A[3]/(Tr**3)))*rho*y
             part_2 = (A[4]+(A[5]/Tr))*(rho**2)*(y**2)
