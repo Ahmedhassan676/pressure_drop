@@ -148,7 +148,7 @@ def NeqSim_calculations(q,D,df_comp,t,p1,p2,L,type):
             p2 = p2*98.066*0.01
             q = q*24/(1000000)
             #Creating inlet fluid using SRK-EoS   
-            names =  list(df_comp.index.str.lower())
+            names =  [i.lower() if i not in ['Co2', 'Co', 'H2s'] else i.upper() for i in df_comp.index ]
             molefractions = list(df_comp['mol%']*0.01)
             fluid1 = createfluid2(names, molefractions)
             fluid1.setMixingRule('classic')
@@ -190,7 +190,7 @@ def NeqSim_calculations(q,D,df_comp,t,p1,p2,L,type):
             p2 = p2*98.066*0.01
             q = q*24/(1000000)
             #Creating inlet fluid using SRK-EoS   
-            names =  list(df_comp.index.str.lower())
+            names =  [i.lower() if i not in ['Co2', 'Co', 'H2s'] else i.upper() for i in df_comp.index ]
             molefractions = list(df_comp['mol%']*0.01)
             fluid1 = createfluid2(names, molefractions)
             fluid1.setMixingRule('classic')
@@ -230,7 +230,7 @@ def NeqSim_calculations(q,D,df_comp,t,p1,p2,L,type):
             p2 = p2*98.066*0.01
             q = q*24/(1000000)
             #Creating inlet fluid using SRK-EoS   
-            names =  list(df_comp.index.str.lower())
+            names =  [i.lower() if i not in ['Co2', 'Co', 'H2s'] else i.upper() for i in df_comp.index ]
             molefractions = list(df_comp['mol%']*0.01)
             fluid1 = createfluid2(names, molefractions)
             fluid1.setMixingRule('classic')
@@ -281,7 +281,7 @@ def graph_NeqSim(q,D,df_comp,t,p1,L):
             
             q = q*24/(1000000)
             #Creating inlet fluid using SRK-EoS   
-            names =  list(df_comp.index.str.lower())
+            names =  [i.lower() if i not in ['Co2', 'Co', 'H2s'] else i.upper() for i in df_comp.index ]
             molefractions = list(df_comp['mol%']*0.01)
             fluid1 = createfluid2(names, molefractions)
             fluid1.setMixingRule('classic')
@@ -351,7 +351,8 @@ def graph_NeqSim(q,D,df_comp,t,p1,L):
 def get_viscosity(df_comp,p1,t):
          
         # define component list and mol. fraction
-        names =  list(df_comp.index.str.lower())
+        names = [i.lower() if i not in ['Co2', 'Co', 'H2s'] else i.upper() for i in df_comp.index ]
+        
         molefractions = list(df_comp['mol%']*0.01)
         #Creating fluid stream using SRK-EoS
         fluid1 = createfluid2(names, molefractions)
@@ -759,7 +760,7 @@ def main():
                         error = abs(f - f1)
                         f = f1
                 dp = (f*L*rho_liq*(v_liq**2))/(D*2)*0.001*0.0101972
-
+                
                 return dp,v_liq,Re,f,e
         def Nelson_equation(Q,L,D,rho_liq,mu):
             Q = Q /3600
