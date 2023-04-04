@@ -383,15 +383,16 @@ def general_gas_equation(q,p1,p2,D,G,z,L,t,mu,type):
         e = 0.00005 #Roughness
         tb = 273+15.55556
         Pb = 101.325
+        D_mm = D*1000
         D = D *1000
         calc_port =G*(t+273.15)*L*z
         dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
-        D_mm = D*1000
+        
         error =10
         while error > 0.0001:
             Q_std = ((11.4946*(10**-4))*(1/(f**0.5))*(tb/Pb)*((dp_2/calc_port)**0.5)*((D)**2.5))/24 #*0.947942947917463/24
             Re = 0.5134*(Pb/tb)*((G*Q_std*24)/(mu*0.01*D_mm))
-            f1 = (1/(-2*np.log((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2
+            f1 = (1/(-2*np.log10((e/(3.7*D*0.001))+(2.51/(Re*(f**0.5))))))**2
             
             error = abs(f - f1)
             f = f1
@@ -403,14 +404,15 @@ def general_gas_equation(q,p1,p2,D,G,z,L,t,mu,type):
         e = 0.00005 #Roughness
         tb = 273+15.55556
         Pb = 101.325
+        D_mm = D*1000
         D = D *1000
         calc_port =G*(t+273.15)*L*z
-        #dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
-        D_mm = D*1000
+        
+        
         error =10
         Re = 0.5134*(Pb/tb)*((G*Q_std*24)/(mu*0.01*D_mm))
         while error > 0.0001:
-            f1 = (1/(-2*np.log((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2
+            f1 = (1/(-2*np.log10((e/(3.7*D*0.001))+(2.51/(Re*(f**0.5))))))**2
             error = abs(f - f1)
             f = f1
         p1 = np.sqrt(((((Q_std*24*(f**0.5))/((11.4946*(10**-4))*(tb/Pb)*((D)**2.5)))**2)*calc_port)+((p2*98.066)**2))/98.066
@@ -422,16 +424,18 @@ def general_gas_equation(q,p1,p2,D,G,z,L,t,mu,type):
         e = 0.00005 #Roughness
         tb = 273+15.55556
         Pb = 101.325
+        D_mm = D*1000
         D = D *1000
         calc_port =G*(t+273.15)*L*z
-        #dp_2 = ((p1*98.066)**2)-((p2*98.066)**2)
-        D_mm = D*1000
+        
+        
         error =10
         Re = 0.5134*(Pb/tb)*((G*Q_std*24)/(mu*0.01*D_mm))
         while error > 0.0001:
-            f1 = (1/(-2*np.log((e/(3.7*D))+(2.51/(Re*(f**0.5))))))**2
+            f1 = (1/(-2*np.log10((e/(3.7*D*0.001))+(2.51/(Re*(f**0.5))))))**2
             error = abs(f - f1)
-            f = f1
+            f = f1 
+        
         p2 = np.sqrt(-((((Q_std*24*(f**0.5))/((11.4946*(10**-4))*(tb/Pb)*((D)**2.5)))**2)*calc_port)+((p1*98.066)**2))/98.066
         result1,result2 = p2,f    
     return result1,result2
