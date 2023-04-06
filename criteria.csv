@@ -117,25 +117,25 @@
 116,single phase,flare gas,no/na,na,"upstream of downstream device, intermittent flow",NA,NA,NA,NA,NA,≤ 150000 kg/ms2,< 0.7,NA,"Total standard GS-EP-ECP-103, Revision 02",For ρ > 100000 kg/ms2 vibration and line supports are required
 117,single phase,flare gas,no/na,na,"upstream of downstream device, continuous flow",NA,NA,NA,NA,NA,≤ 50000 kg/ms2,< 0.35,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
 118,two phase,flare gas and condensate,no/na,na,upstream of relieving device,NA,NA,NA,NA,NA,≤ 50000 kg/ms2,< 0.25,NA,"Total standard GS-EP-ECP-103, Revision 02",NA
-119,single phase,gas/vapor,no/na,na,Atmospheric / Vacuum,NA,Economic Velocity,Economic Velocity,Economic Velocity,0.01 -0.07 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-120,single phase,gas/vapor,no/na,na,10 kgf/cm2G and below,NA,Economic Velocity,Economic Velocity,Economic Velocity,0.07 - 0.20 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-121,single phase,gas/vapor,no/na,na,100 kgf/cm2G and below,NA,Economic Velocity,Economic Velocity,Economic Velocity,0.20 - 0.70 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-122,single phase,gas/vapor,no/na,na,Over 100 kgf/cm2G,NA,Economic Velocity,Economic Velocity,Economic Velocity,0.7% of Poperating (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-123,single phase,gas/vapor,no/na,na,Reboiler return (Kettle type),NA,NA,NA,NA,0.02 - 0.05 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-124,single phase,gas/vapor,no/na,na,Reboiler return (Thermosyphon type),NA,NA,NA,NA,0.02 - 0.05 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-125,single phase,gas/vapor,no/na,na,Compressor suction (Reciprocating),NA,NA,12 m/s (practical),NA,NA,NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
-126,single phase,gas/vapor,no/na,na,Compressor suction (Centrifugal),NA,Economic Velocity,Economic Velocity,NA,0.0 - 0.5 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-127,single phase,gas/vapor,no/na,na,Furnace transfer line (100% vapor),NA,NA,NA,NA,0.3 - 1.7 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-128,single phase,liquid,no/na,na,Furnace transfer line (100% liquid),NA,NA,NA,NA,0.11 - 0.75 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-129,two phase,gas & liquid,no/na,na,Furnace transfer line (Gas/liquid mixed phase),NA,NA,NA,NA,0.16 - 1.10 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-130,single phase,gas,no/na,na,"Instrument, plant air (Atmospheric)",NA,Economic Velocity,Economic Velocity,,0.05  (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-131,single phase,gas,no/na,na,"Instrument, plant air (Up to 3.5 kgf/cm2G)",NA,Economic Velocity,Economic Velocity,,0.07 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-132,single phase,gas,no/na,na,"Instrument, plant air (Up to 7 kgf/cm2G)",NA,Economic Velocity,Economic Velocity,,0.11 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-133,single phase,gas,no/na,na,"Instrument, plant air (Up to 10 kgf/cm2G)",NA,Economic Velocity,Economic Velocity,,0.13 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
-134,single phase,steam,no/na,na,Saturate steam (Below 7 kgf/cm2G),NA,NA,40 - 60 m/s  (practical),,0.20 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
-135,single phase,steam,no/na,na,Saturate steam (Above 7 kgf/cm2G),NA,NA,30 - 50 m/s  (practical),,0.45 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
-136,single phase,condensate,no/na,na,Steam condensate: Upstream of steam trap or control valve,NA,NA,NA,NA,0.05 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",NA
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
 137,single phase,condensate,no/na,na,"Steam condensate: Downstream
 of steam trap or control valve",NA,NA,25 m/s (practical),NA,0.2 - 0.7 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
-138,single phase,liquid,no/na,na,Cooling water,NA,NA,1 - 4 m/s (practical),,0.3 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
-139,single phase,liquid,no/na,na,Sea water,NA,NA,1 - 4 m/s (practical),,NA,NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
+137,single phase,liquid,no/na,na,Cooling water,NA,NA,1 - 4 m/s (practical),,0.3 (kgf/cm2/100m),NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
+137,single phase,liquid,no/na,na,Sea water,NA,NA,1 - 4 m/s (practical),,NA,NA,NA,NA,"JGC 210-120-1-37E, Rev. 4",Practical velocity
