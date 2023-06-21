@@ -1,1 +1,1 @@
-OpenJDK 17
+openjdk-11-jre
