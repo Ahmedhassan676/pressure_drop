@@ -1,2 +1,1 @@
-default-jre-headless
-ca-certificates-java
+JDK 17
