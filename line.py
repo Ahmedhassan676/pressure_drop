@@ -501,7 +501,7 @@ def main():
         st.write("""Note that Ls is the sum of XYZ coordinate length. \n For large size or high pressure piping, it is recommended to estimate the number of elbows tees and valves and evaluate the equivalent length, assuming piping layout.""")
         
         df_gas['input'] = 0.00
-        edited_df = st.experimental_data_editor(df_gas)
+        edited_df = st.data_editor(df_gas)
         q=0
         p1,p2,t,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0]
         if D != 0 and p1 != 0 and p2 !=0 :
@@ -587,7 +587,7 @@ def main():
         df_gas_modified = df_gas.copy()
         df_gas_modified['input'] = 0.00
         df_gas_modified.rename(index={'P1 (Kg/cm2)': 'Flow Rate (Std.m3/hr)'}, inplace=True)
-        edited_df = st.experimental_data_editor(df_gas_modified)
+        edited_df = st.data_editor(df_gas_modified)
         
         
         
@@ -668,7 +668,7 @@ def main():
         df_gas_modified = df_gas.copy()
         df_gas_modified['input'] = 0.00
         df_gas_modified.rename(index={'P1 (Kg/cm2)': 'Flow Rate (Std.m3/hr)','P2(Kg/cm2)':'P1 (Kg/cm2)'}, inplace=True)
-        edited_df = st.experimental_data_editor(df_gas_modified)
+        edited_df = st.data_editor(df_gas_modified)
         
         
         
@@ -795,7 +795,7 @@ def main():
         df_liq['input'] = 0.00
         s2 = st.selectbox('Calculate NPSHa?',('No','Yes'), key = 'NPSHa')
         if s2 == 'No':
-            edited_df = st.experimental_data_editor(df_liq.iloc[:7,:])
+            edited_df = st.data_editor(df_liq.iloc[:7,:])
             p1,t,Q,rho_liq, mu,L,D = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0]
             
             
@@ -814,7 +814,7 @@ def main():
                 st.dataframe(df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],:])
                 st.download_button("Click to download your calculations table!", convert_data(df_liq.iloc[[0,1,2,3,4,5,6,9,10,11,12,13,14],:].reset_index()),"pressure_drop_calculations.csv","text/csv", key = "download4")
         else: 
-            edited_df = st.experimental_data_editor(df_liq.iloc[:9,:])
+            edited_df = st.data_editor(df_liq.iloc[:9,:])
             p1,t,Q,rho_liq, mu,L,D,H,Vp = edited_df.iloc[0,0],edited_df.iloc[1,0],edited_df.iloc[2,0],edited_df.iloc[3,0],edited_df.iloc[4,0],edited_df.iloc[5,0],edited_df.iloc[6,0],edited_df.iloc[7,0],edited_df.iloc[8,0]
             
             if st.button("Reveal Calculations", key = 'calculations_tableLiq'):
