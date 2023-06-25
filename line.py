@@ -89,7 +89,7 @@ def choose_composition():
                 sum_of_comp = 0 
                 c1,c2,c3,c4,c5,c6,c7,c8,c9,c16,c10,c11,c13,h2o = 0,0,0,0,0,0,0,0,0,0,0,0,0,0
                 options_list = [df_comp_table.columns[i] for i in [22,1,4,6,11,10,13,15,20,21,24,25,23,19]]
-                while sum_of_comp != 100:
+                while int(sum_of_comp) != 100:
                     options = st.multiselect(
                     'Select your components', options_list
                     )
